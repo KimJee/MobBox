@@ -11,6 +11,11 @@ Reports:
 - [Status](status.html)
 - [Final](final.html)
 
+
+# Welcome to Natalia & Jee's Project for CS175
+* Authors: Jee Kim & Natalia Pinpin
+
+
 What's Markdown (`.md`)?
 
 Markdown is markup that lets you write hypertext (HTML) documents
@@ -35,6 +40,4 @@ $$x^2 = y^2$$
 
 Just getting started with Markdown?
 See the [HTML <-> Markdown Quick Reference (Cheat Sheet)][quickref].
-
-
 [quickref]: https://github.com/mundimark/quickrefs/blob/master/HTML.md
