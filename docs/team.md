@@ -6,11 +6,11 @@ title:  Team
 # {{ page.title }}
 
 
-## USER 1
-***UCI Net ID***: ucinetid1
+## Jee Kim
+***UCI Net ID***: jeehk8
 
-## USER 2
-***UCI Net ID***: ucinetid2
+## Natalia Pinpin 
+***UCI Net ID***: npinpin 
 
 ## USER 3
-***UCI Net ID***: ucinetid3
+***UCI Net ID***: ucinetid3 (TBD)
