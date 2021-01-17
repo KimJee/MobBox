@@ -3,8 +3,14 @@ layout: default
 title:  Proposal
 ---
 
-# Objective:
+# First Meeting Time
+---
+1/21/2021 @ 12:15pm
 
+
+
+# Objective:
+---
 ## Stage 1:
 ## Stage 2:
 ## Stage 3:
