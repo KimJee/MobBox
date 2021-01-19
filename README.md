@@ -103,7 +103,6 @@ Natalia was here
 
 - Minecraft Agario:
 - [ ] Maybe we can make Agar.io in minecraft, with multiple agents trying to get as much pellets as possible.
-
   - [ ] Use ML to optimize pellets for a given map
 
 - [ ] Minecraft SpleefAI
