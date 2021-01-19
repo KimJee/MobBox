@@ -20,7 +20,7 @@ Two metrics we will utilize are the average success rate on a given map and the 
 ## Qualitative Analysis
 The NLP sanity cases will look similar to the baseline: it must be able to translate single words into executable commands. For the agent execution sanity cases, it must be able to successfully navigate maps with only the correct color block and small maps with only 4 blocks (with different colors). To visualize our algorithms, we will create flow diagrams to map out the logic and use debugging tools to track the output. Our moonshot case would be if the agent we train could on average perform better than a human attempting that same challenge.
 
-![alt text]("https://github.com/KimJee/Phoenix/blob/master/docs/proposal_img/diagram1.jpg Diagram1")
+![alt text](https://github.com/KimJee/Phoenix/blob/master/docs/proposal_img/diagram1.jpg "Diagram1")
 
 
 # Appointment with the Instructor
