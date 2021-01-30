@@ -6,6 +6,10 @@ _site/
 *
 
 # Except
-! .gitignore
+!.gitignore
 !Python_Examples/Phoenix.py
+!docs/*
 
+
+# Even in subdirectories
+! */ 
