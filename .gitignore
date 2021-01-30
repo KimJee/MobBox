@@ -1,3 +1,11 @@
 _site/
 .sass-cache/
 .jekyll-metadata
+
+# Ignore everything
+*
+
+# Except
+! .gitignore
+!Python_Examples/Phoenix.py
+
