@@ -28,9 +28,9 @@
 
 4. Change Directory into that folder
 
-5. Create an folder for the images 
+5. Create an folder \['images'\] for the images
 
-5. Run the command ffmpeg -i video.mp4 -r 1/1 ${foldername}/${filename}%03d.bmp
+6. Run the command ffmpeg -i video.mp4 -vf fps=1 ./images/out%d.png
 
 ## Todo as a Group
 
