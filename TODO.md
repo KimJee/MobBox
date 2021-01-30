@@ -12,6 +12,25 @@
 * [x] Rearranging desk to have a second monitor if it can even fit ;|
 * [ ] Splice those videos into frames
   * Apparently FFMPEG has a video to image splitting functionality so I'm going to give that a shot.
+  * According to this [link](https://www.imore.com/how-extract-images-frame-frame-using-ffmpeg-macos) the command we're looking for is... 
+    * ffmpeg -i {./video/timestamp}.mpg -r 1/1 $filename%03d.bmp
+    * Design Comment: We May want to store our files as .bmp \[bitmap\] files instead of .jpeg files for better quality.
+    * OOPS! Okay that's not how you do it.
+    * Here's the better [documentation](https://trac.ffmpeg.org/wiki/Create%20a%20thumbnail%20image%20every%20X%20seconds%20of%20the%20video)
+
+### INSTRUCTIONS TO CONVERT .MP4 to JPEG
+
+1. Change Directory to the /video/ directory
+
+2. Extract the .tgz into a .tar file.
+
+3. Extract again, the .tar file into a folder
+
+4. Change Directory into that folder
+
+5. Create an folder for the images 
+
+5. Run the command ffmpeg -i video.mp4 -r 1/1 ${foldername}/${filename}%03d.bmp
 
 ## Todo as a Group
 

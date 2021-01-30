@@ -79,7 +79,7 @@ print(date_time_string)
 #print(file_name)
 my_mission_record = MalmoPython.MissionRecordSpec("./video/" + date_time_string + ".tgz")
 my_mission_record.recordCommands();
-my_mission_record.recordMP4(20, 400000)
+my_mission_record.recordMP4(1, 400000)
 my_mission_record.recordObservations();
 
 
