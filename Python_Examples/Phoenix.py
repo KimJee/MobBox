@@ -62,7 +62,6 @@ my_mission.timeLimitInSeconds(15)
 
 """
 
-import datetime;
 
 # var recordedFileName = $"./mission_data{DateTime.Now:hh mm ss}.tgz";
 # var missionRecord = new MissionRecordSpec(recordedFileName);
@@ -72,7 +71,13 @@ import datetime;
 # missionRecord.recordObservations();
 # _agentHost.startMission(mission, missionRecord);
 
-my_mission_record = MalmoPython.MissionRecordSpec("data.tgz")
+from datetime import datetime
+
+date_time_string = datetime.now().strftime("%m-%d-%Y_%H-%M-%S")
+print(date_time_string)
+#file_name = "\\Users\\Jee\\CS175Project\\Malmo-0.37.0-Windows-64bit_withBoost_Python3.7 (1)\\Github\\Phoenix\\Python_Examples\\mission_records\\" + date_time_string + ".tgz"
+#print(file_name)
+my_mission_record = MalmoPython.MissionRecordSpec("./video/" + date_time_string + ".tgz")
 my_mission_record.recordCommands();
 my_mission_record.recordMP4(20, 400000)
 my_mission_record.recordObservations();
@@ -109,6 +114,7 @@ print("Mission running ", end=' ')
 while world_state.is_mission_running:
     print(".", end="")
     time.sleep(0.1)
+
     world_state = agent_host.getWorldState()
     for error in world_state.errors:
         print("Error:", error.text)
