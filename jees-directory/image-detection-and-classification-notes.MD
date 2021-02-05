@@ -103,3 +103,9 @@
 [Color-map .mp4 from Malmo] -> Custom Python Script to convert color info to coordinates -> "training labels"
 [Regular video stream .mp4 from Malmo] -> "training images"
 [training_labels, training_images] -> PyTorch-YOLOv3 -> Output {bounding boxes, classification}
+
+### Concerns
+
+---
+
+* We don't know how to make our project different from [link](https://kevinjchen.github.io/MCSemanticSegmentation/status.html)
