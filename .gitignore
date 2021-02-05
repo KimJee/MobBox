@@ -9,7 +9,7 @@ _site/
 !.gitignore
 !Python_Examples/Phoenix.py
 !docs/*
-
+!jees-directory/
 
 # Even in subdirectories
 ! */ 
