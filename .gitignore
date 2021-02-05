@@ -9,7 +9,7 @@ _site/
 !.gitignore
 !Python_Examples/Phoenix.py
 !docs/*
-!jees-directory/
+!jees-directory/image-detection-and-classification-notes.MD
 
 # Even in subdirectories
 ! */ 
