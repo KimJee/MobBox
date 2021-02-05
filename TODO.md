@@ -12,7 +12,7 @@
 * [x] Rearranging desk to have a second monitor if it can even fit ;|
 * [ ] Splice those videos into frames
   * Apparently FFMPEG has a video to image splitting functionality so I'm going to give that a shot.
-  * According to this [link](https://www.imore.com/how-extract-images-frame-frame-using-ffmpeg-macos) the command we're looking for is... 
+  * According to this [link](https://www.imore.com/how-extract-images-frame-frame-using-ffmpeg-macos) the command we're looking for is...
     * ffmpeg -i {./video/timestamp}.mpg -r 1/1 $filename%03d.bmp
     * Design Comment: We May want to store our files as .bmp \[bitmap\] files instead of .jpeg files for better quality.
     * OOPS! Okay that's not how you do it.
@@ -30,8 +30,16 @@
 
 5. Create an folder \['images'\] for the images
 
-6. Run the command ffmpeg -i video.mp4 -vf fps=1 ./images/out%d.png
+6. Run the command ffmpeg -i video.mp4 -vf fps=0.5 ./images/out%d.png
 
 ## Todo as a Group
 
-* [ ] Run it through a 'differentiator
+* [ ] Run it through a 'differentiator'
+
+### Goals for Next Meeting
+
+* We want to determine "what" objects are \[Classification \]
+* We also want to determine "where" the objects are in the image, and bound them with "boxes" \[Detection \]
+* Research more about object classification & detection
+  * Find frameworks (e.g. OpenCV) that will try to bound and classify these images
+

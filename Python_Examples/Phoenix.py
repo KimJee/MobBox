@@ -50,7 +50,33 @@ if agent_host.receivedArgument("help"):
     exit(0)
 
 
-my_mission = MalmoPython.MissionSpec()
+missionXML='''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+            <Mission xmlns="http://ProjectMalmo.microsoft.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            
+              <About>
+                <Summary>Hello world!</Summary>
+              </About>
+              
+              <ServerSection>
+                <ServerHandlers>
+                  <FlatWorldGenerator generatorString="3;7,220*1,5*3,2;3;,biome_1"/>
+                  <ServerQuitFromTimeUp timeLimitMs="30000"/>
+                  <ServerQuitWhenAnyAgentFinishes/>
+                </ServerHandlers>
+              </ServerSection>
+              
+              <AgentSection mode="Survival">
+                <Name>MalmoTutorialBot</Name>
+                <AgentStart/>
+                <AgentHandlers>
+                  <ObservationFromFullStats/>
+                  <ContinuousMovementCommands turnSpeedDegs="180"/>
+                </AgentHandlers>
+              </AgentSection>
+            </Mission>'''
+
+
+my_mission = MalmoPython.MissionSpec(missionXML, True)
 my_mission.requestVideo(640, 480)
 my_mission.timeLimitInSeconds(15)
 
@@ -78,9 +104,10 @@ print(date_time_string)
 #file_name = "\\Users\\Jee\\CS175Project\\Malmo-0.37.0-Windows-64bit_withBoost_Python3.7 (1)\\Github\\Phoenix\\Python_Examples\\mission_records\\" + date_time_string + ".tgz"
 #print(file_name)
 my_mission_record = MalmoPython.MissionRecordSpec("./video/" + date_time_string + ".tgz")
-my_mission_record.recordCommands();
-my_mission_record.recordMP4(1, 400000)
-my_mission_record.recordObservations();
+my_mission_record.recordCommands()
+my_mission_record.recordMP4(30, 400000)
+#my_mission_record.recordMP4(MalmoPython.FrameType.COLOUR_MAP, 1, 400000, True)
+my_mission_record.recordObservations()
 
 
 # Attempt to start a mission:
