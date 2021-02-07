@@ -23,6 +23,7 @@ from __future__ import print_function
 from builtins import range
 
 import random
+import cv2
 
 try:
     import MalmoPython
@@ -55,7 +56,7 @@ import time
     Global Variables
 """
 ARENA_SIZE = 20
-MOB_TYPE = "Chicken"
+MOB_TYPE = "Cow"
 ENTITY_DENSITY = 0.02
 spawn_end_tag = ' type="' + MOB_TYPE + '"/>'
 
@@ -67,6 +68,11 @@ def spawn_mob():
             if random.random() < ENTITY_DENSITY:
                 entities += f"<DrawEntity x='{x}' y='2' z='{z}'" + spawn_end_tag
     return entities
+
+def spawn_entity_in_front():
+    return "<DrawEntity x='0' y='2' z='3'" + spawn_end_tag
+
+
 
 def get_xml():
     return '''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
@@ -89,7 +95,7 @@ def get_xml():
                     <ServerHandlers>
                         <FlatWorldGenerator generatorString="3;7,2;1;"/>
                         <DrawingDecorator>''' + \
-                        spawn_mob() + \
+                        spawn_entity_in_front() + \
                         '''</DrawingDecorator>
                         <ServerQuitWhenAnyAgentFinishes/>
                     </ServerHandlers>
@@ -109,9 +115,9 @@ def get_xml():
                                 <Height>480</Height>
                               </VideoProducer>
                               <ColourMapProducer>
-                                    <Width>860</Width>
-                                    <Height>480</Height>
-                                </ColourMapProducer>
+                                <Width>860</Width>
+                                <Height>480</Height>
+                              </ColourMapProducer>
                     </AgentHandlers>
                 </AgentSection>
             </Mission>'''
@@ -128,14 +134,7 @@ def get_xml():
 from datetime import datetime
 
 
-
-def run():
-    agent_host = MalmoPython.AgentHost()                  # Create our agent_host
-    malmoutils.parse_command_line(agent_host)             # Emulates the commandline functionlity from team_reward_test
-    my_xml = get_xml()                                    # Grabs the xml "environment-settings"
-    my_mission = MalmoPython.MissionSpec(my_xml, True)    # Describes the mission specifications
-    my_mission.timeLimitInSeconds(15)
-
+def recordDualStream():
     date_time_string = datetime.now().strftime("%m-%d-%Y_%H-%M-%S")
     print(date_time_string)
     #file_name = "\\Users\\Jee\\CS175Project\\Malmo-0.37.0-Windows-64bit_withBoost_Python3.7 (1)\\Github\\Phoenix\\Python_Examples\\mission_records\\" + date_time_string + ".tgz"
@@ -148,8 +147,9 @@ def run():
 
     my_mission_record.recordMP4(MalmoPython.FrameType.COLOUR_MAP, 24, 2000000, False)
     my_mission_record.recordMP4(MalmoPython.FrameType.VIDEO, 24, 2000000, False)
+    return my_mission_record
 
-
+def do_mission(agent_host, my_mission, my_mission_record):
     # Attempt to start a mission:
     max_retries = 3
     for retry in range(max_retries):
@@ -185,10 +185,20 @@ def run():
         world_state = agent_host.getWorldState()
         for error in world_state.errors:
             print("Error:", error.text)
-
     print()
     print("Mission ended")
     # Mission has ended.
+
+
+
+def run():
+    agent_host = MalmoPython.AgentHost()                  # Create our agent_host
+    malmoutils.parse_command_line(agent_host)             # Emulates the commandline functionlity from team_reward_test
+    my_xml = get_xml()                                    # Grabs the xml "environment-settings"
+    my_mission = MalmoPython.MissionSpec(my_xml, True)    # Describes the mission specifications
+    my_mission.timeLimitInSeconds(15)                     # Describes the time limit for the mission
+    my_mission_record = recordDualStream()                # Records both regular video & color-map onto /video/ directory
+    do_mission(agent_host, my_mission, my_mission_record) # Starts and runs mission loop
 
 if __name__ == "__main__":
     run()
