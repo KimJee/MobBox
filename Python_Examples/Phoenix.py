@@ -50,33 +50,56 @@ if agent_host.receivedArgument("help"):
     exit(0)
 
 
-missionXML='''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-            <Mission xmlns="http://ProjectMalmo.microsoft.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-            
-              <About>
-                <Summary>Hello world!</Summary>
-              </About>
-              
-              <ServerSection>
+ARENA_SIZE = 20
+MOB_TYPE = "Chicken"
+ENTITY_DENSITY = 0.02
+spawn_end_tag = ' type="' + MOB_TYPE + '"/>'
+entities = ""
+for x in range(-ARENA_SIZE,ARENA_SIZE):
+    for z in range(-ARENA_SIZE,ARENA_SIZE):
+        if random.random() < ENTITY_DENSITY:
+            entities += f"<DrawEntity x='{x}' y='2' z='{z}'" + spawn_end_tag
+
+my_xml = '''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+        <Mission xmlns="http://ProjectMalmo.microsoft.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+            <About>
+                <Summary>CS175 Test</Summary>
+            </About>
+
+            <ServerSection>
+                <ServerInitialConditions>
+                    <Time>
+                        <StartTime>12000</StartTime>
+                        <AllowPassageOfTime>false</AllowPassageOfTime>
+                    </Time>
+                    <AllowSpawning>true</AllowSpawning>
+                    <AllowedMobs>''' + MOB_TYPE + '''</AllowedMobs>
+                    <Weather>clear</Weather>
+                </ServerInitialConditions>
                 <ServerHandlers>
-                  <FlatWorldGenerator generatorString="3;7,220*1,5*3,2;3;,biome_1"/>
-                  <ServerQuitFromTimeUp timeLimitMs="30000"/>
-                  <ServerQuitWhenAnyAgentFinishes/>
+                    <FlatWorldGenerator generatorString="3;7,2;1;"/>
+                    <DrawingDecorator>''' + \
+                    entities + \
+                    '''</DrawingDecorator>
+                    <ServerQuitWhenAnyAgentFinishes/>
                 </ServerHandlers>
-              </ServerSection>
-              
-              <AgentSection mode="Survival">
-                <Name>MalmoTutorialBot</Name>
-                <AgentStart/>
-                <AgentHandlers>
-                  <ObservationFromFullStats/>
-                  <ContinuousMovementCommands turnSpeedDegs="180"/>
-                </AgentHandlers>
-              </AgentSection>
-            </Mission>'''
+            </ServerSection>
+
+            <AgentSection mode="Spectator">
+                <Name>CS175Test</Name>
+                <AgentStart>
+                    <Placement x="0" y="2" z="0" pitch="0" yaw="0"/>
+                    <Inventory>
+                       <InventoryItem slot="0" type="diamond_pickaxe"/>
+                    </Inventory>
+                </AgentStart>
+            </AgentSection>
+        </Mission>'''
 
 
-my_mission = MalmoPython.MissionSpec(missionXML, True)
+
+my_mission = MalmoPython.MissionSpec(my_xml, True)
 my_mission.requestVideo(640, 480)
 my_mission.timeLimitInSeconds(15)
 
