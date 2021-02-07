@@ -39,40 +39,30 @@ import errno
 import os
 import sys
 import time
-
-
-# try:
-#     agent_host.parse(sys.argv)
-# except RuntimeError as e:
-#     print('ERROR:', e)
-#     print(agent_host.getUsage())
-#     exit(1)
-# if agent_host.receivedArgument("help"):
-#     print(agent_host.getUsage())
-#     exit(0)
-
+from datetime import datetime
+import cv2
+import tarfile
 
 """
     Global Variables
 """
 ARENA_SIZE = 20
-MOB_TYPE = "Cow"
+MOB_TYPE = "Chicken"
+OFF_LIMITS_MOB = ""
 ENTITY_DENSITY = 0.02
-spawn_end_tag = ' type="' + MOB_TYPE + '"/>'
+TIMESTAMP = datetime.now().strftime("%m-%d-%Y_%H-%M-%S")
+VIDEO_FILE_PATH = "./video/" + TIMESTAMP + ".tgz"
 
-
-def spawn_mob():
+def spawn_mob(spawn_type):
     entities = "" # Output XML String
     for x in range(-ARENA_SIZE,ARENA_SIZE):
         for z in range(-ARENA_SIZE,ARENA_SIZE):
             if random.random() < ENTITY_DENSITY:
-                entities += f"<DrawEntity x='{x}' y='2' z='{z}'" + spawn_end_tag
+                entities += f"<DrawEntity x='{x}' y='2' z='{z}' type='{spawn_type}'/>"
     return entities
 
-def spawn_entity_in_front():
-    return "<DrawEntity x='0' y='2' z='3'" + spawn_end_tag
-
-
+def spawn_entity_in_front(spawn_type):
+    return f"<DrawEntity x='0' y='2' z='3' type='{spawn_type}'/>"
 
 def get_xml():
     return '''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
@@ -95,7 +85,8 @@ def get_xml():
                     <ServerHandlers>
                         <FlatWorldGenerator generatorString="3;7,2;1;"/>
                         <DrawingDecorator>''' + \
-                        spawn_entity_in_front() + \
+                        spawn_entity_in_front("Cow") + \
+                        spawn_entity_in_front(MOB_TYPE) + \
                         '''</DrawingDecorator>
                         <ServerQuitWhenAnyAgentFinishes/>
                     </ServerHandlers>
@@ -123,23 +114,8 @@ def get_xml():
             </Mission>'''
 
 
-# var recordedFileName = $"./mission_data{DateTime.Now:hh mm ss}.tgz";
-# var missionRecord = new MissionRecordSpec(recordedFileName);
-# missionRecord.recordCommands();
-# missionRecord.recordMP4(20, 400000);
-# missionRecord.recordRewards();
-# missionRecord.recordObservations();
-# _agentHost.startMission(mission, missionRecord);
-
-from datetime import datetime
-
-
 def recordDualStream():
-    date_time_string = datetime.now().strftime("%m-%d-%Y_%H-%M-%S")
-    print(date_time_string)
-    #file_name = "\\Users\\Jee\\CS175Project\\Malmo-0.37.0-Windows-64bit_withBoost_Python3.7 (1)\\Github\\Phoenix\\Python_Examples\\mission_records\\" + date_time_string + ".tgz"
-    #print(file_name)
-    my_mission_record = MalmoPython.MissionRecordSpec("./video/" + date_time_string + ".tgz")
+    my_mission_record = MalmoPython.MissionRecordSpec(VIDEO_FILE_PATH)
 
     my_mission_record.recordRewards()
     my_mission_record.recordCommands()
@@ -190,15 +166,43 @@ def do_mission(agent_host, my_mission, my_mission_record):
     # Mission has ended.
 
 
+def parse_video():
+    videos = []
+    tgz = tarfile.open(VIDEO_FILE_PATH, "r:gz")
+    tgz.extractall(path="./video")
+    for member in tgz.getnames():
+        if member.endswith(".mp4"):
+            videos.append(member)
+
+    for video in videos:
+        if video.endswith("colourmap_video.mp4"):
+            image_path = "./colour_map_images/" + TIMESTAMP
+        else:
+            image_path = "./video_images/" + TIMESTAMP
+        try:
+            os.makedirs(image_path)
+        except OSError as exception:
+            pass
+
+        cap = cv2.VideoCapture("./video/" + video)
+        success = True
+        count = 0
+        while success:
+            cap.set(cv2.CAP_PROP_POS_MSEC, count*500)  # 2 fps
+            success, image = cap.read()
+            if success:
+                cv2.imwrite(image_path + f"/{count}.jpg", image)
+                count += 1
+
 
 def run():
     agent_host = MalmoPython.AgentHost()                  # Create our agent_host
-    malmoutils.parse_command_line(agent_host)             # Emulates the commandline functionlity from team_reward_test
     my_xml = get_xml()                                    # Grabs the xml "environment-settings"
     my_mission = MalmoPython.MissionSpec(my_xml, True)    # Describes the mission specifications
-    my_mission.timeLimitInSeconds(15)                     # Describes the time limit for the mission
+    my_mission.timeLimitInSeconds(5)                     # Describes the time limit for the mission
     my_mission_record = recordDualStream()                # Records both regular video & color-map onto /video/ directory
     do_mission(agent_host, my_mission, my_mission_record) # Starts and runs mission loop
+    parse_video()
 
 if __name__ == "__main__":
     run()
