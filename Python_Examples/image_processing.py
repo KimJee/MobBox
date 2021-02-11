@@ -7,6 +7,10 @@ chicken = np.array([36, 195, 175])
 
 
 def parse_video(video_path, timestamp):
+
+    WANTED_FRAME_PER_SECOND = 1
+    FRAME_PARAM = 1000 // WANTED_FRAME_PER_SECOND # 1 frame per second
+
     videos = []
     tgz = tarfile.open(video_path, "r:gz")
     tgz.extractall(path="./video")
@@ -28,7 +32,7 @@ def parse_video(video_path, timestamp):
         success = True
         count = 0
         while success:
-            cap.set(cv2.CAP_PROP_POS_MSEC, count*125)  # 8 fps
+            cap.set(cv2.CAP_PROP_POS_MSEC, count*FRAME_PARAM)  # 8 fps
             success, image = cap.read()
             if success:
                 cv2.imwrite(image_dir_path + f"/{timestamp}_{count}.jpg", image)
@@ -64,7 +68,7 @@ def find_bounding_box(bin_img, color_image):
     # cv2.drawContours(img, contours, -1, (0, 255, 0), 3)
     # cv2.imshow('Contours', img)
     # cv2.waitKey(0)
-
+    #print(bin_img)
     # cnt = contours[0]
     # print(cnt)
     # x,y,w,h = cv2.boundingRect(cnt)

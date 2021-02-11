@@ -16,6 +16,13 @@
 * [ ] Use the labeled data, plus our custom images to train our custom model [link](https://github.com/eriklindernoren/PyTorch-YOLOv3)
 * [ ] Test our model (with new unseen images) and compare the error (error metric still in the works)
 
+
+## KNOWN BUGS
+
+---
+
+* [ ] If the chicken goes off the screen the array throws an error because the chicken color isn't there.
+
 ### Things for after the status report
 
 ---
