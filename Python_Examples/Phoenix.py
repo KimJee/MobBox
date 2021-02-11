@@ -42,6 +42,7 @@ import time
 from datetime import datetime
 import cv2
 import tarfile
+import image_processing as ip
 
 """
     Global Variables
@@ -61,8 +62,8 @@ def spawn_mob(spawn_type):
                 entities += f"<DrawEntity x='{x}' y='2' z='{z}' type='{spawn_type}'/>"
     return entities
 
-def spawn_entity_in_front(spawn_type):
-    return f"<DrawEntity x='0' y='2' z='3' type='{spawn_type}'/>"
+def spawn_entity_in_front(spawn_type, x, z):
+    return f"<DrawEntity x='{x}' y='2' z='{z}' type='{spawn_type}'/>"
 
 def get_xml():
     return '''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
@@ -85,8 +86,8 @@ def get_xml():
                     <ServerHandlers>
                         <FlatWorldGenerator generatorString="3;7,2;1;"/>
                         <DrawingDecorator>''' + \
-                        spawn_entity_in_front("Cow") + \
-                        spawn_entity_in_front(MOB_TYPE) + \
+                        spawn_entity_in_front("Cow", 5, 3) + \
+                        spawn_entity_in_front(MOB_TYPE, 0 , 3) + \
                         '''</DrawingDecorator>
                         <ServerQuitWhenAnyAgentFinishes/>
                     </ServerHandlers>
@@ -166,35 +167,6 @@ def do_mission(agent_host, my_mission, my_mission_record):
     # Mission has ended.
 
 
-def parse_video():
-    videos = []
-    tgz = tarfile.open(VIDEO_FILE_PATH, "r:gz")
-    tgz.extractall(path="./video")
-    for member in tgz.getnames():
-        if member.endswith(".mp4"):
-            videos.append(member)
-
-    for video in videos:
-        if video.endswith("colourmap_video.mp4"):
-            image_path = "./colour_map_images/" + TIMESTAMP
-        else:
-            image_path = "./video_images/" + TIMESTAMP
-        try:
-            os.makedirs(image_path)
-        except OSError as exception:
-            pass
-
-        cap = cv2.VideoCapture("./video/" + video)
-        success = True
-        count = 0
-        while success:
-            cap.set(cv2.CAP_PROP_POS_MSEC, count*500)  # 2 fps
-            success, image = cap.read()
-            if success:
-                cv2.imwrite(image_path + f"/{count}.jpg", image)
-                count += 1
-
-
 def run():
     agent_host = MalmoPython.AgentHost()                  # Create our agent_host
     my_xml = get_xml()                                    # Grabs the xml "environment-settings"
@@ -202,7 +174,8 @@ def run():
     my_mission.timeLimitInSeconds(5)                     # Describes the time limit for the mission
     my_mission_record = recordDualStream()                # Records both regular video & color-map onto /video/ directory
     do_mission(agent_host, my_mission, my_mission_record) # Starts and runs mission loop
-    parse_video()
+    image_dir = ip.parse_video(VIDEO_FILE_PATH, TIMESTAMP)
+    ip.find_all_bounding_boxes(image_dir, TIMESTAMP)
 
 if __name__ == "__main__":
     run()

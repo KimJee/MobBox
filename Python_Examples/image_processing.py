@@ -28,13 +28,13 @@ def parse_video(video_path, timestamp):
         success = True
         count = 0
         while success:
-            cap.set(cv2.CAP_PROP_POS_MSEC, count*500)  # 2 fps
+            cap.set(cv2.CAP_PROP_POS_MSEC, count*125)  # 8 fps
             success, image = cap.read()
             if success:
                 cv2.imwrite(image_dir_path + f"/{timestamp}_{count}.jpg", image)
                 count += 1
 
-    return image_dir_path
+    return "./colour_map_images/" + timestamp
 
 
 def merge_images():
@@ -42,8 +42,9 @@ def merge_images():
 
 
 def binary_image(image_path):
-
     img = cv2.imread(image_path)
+    # cv2.imshow("Normal image", img)
+    # cv2.waitKey(0)
     bin_img = np.empty((img.shape[0], img.shape[1]))
 
     for row in range(img.shape[0]):
@@ -58,7 +59,7 @@ def binary_image(image_path):
     return bin_img.astype(np.uint8)
 
 
-def find_bounding_box(bin_img):
+def find_bounding_box(bin_img, color_image):
     contours, hierarchy = cv2.findContours(bin_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     # cv2.drawContours(img, contours, -1, (0, 255, 0), 3)
     # cv2.imshow('Contours', img)
@@ -85,6 +86,8 @@ def find_bounding_box(bin_img):
 
     buf = 4
     x,y,w,h = min[0]-buf, min[1]-buf, max[0]-min[0]+2*buf, max[1]-min[1]+2*buf
+
+    # img = cv2.imread(color_image)
     # cv2.rectangle(img,(x,y),(x+w,y+h),(0,255,0),2)
     # cv2.imshow("Bounding box", img)
     # cv2.waitKey(0)
@@ -110,18 +113,13 @@ def find_all_bounding_boxes(image_dir_path, timestamp):
         pass
 
     for image in sorted(os.listdir(image_dir_path)):
-        if image != ".DS_Store":
+        if image != ".DS_Store":    # add files that are not images
             bin_img = binary_image(image_dir_path + "/" + image)
-            x0, y0, w0, h0 = find_bounding_box(bin_img)
+            x0, y0, w0, h0 = find_bounding_box(bin_img, "./video_images/" + timestamp + "/" + image)
             x, y, w, h = scale_bounding_box(x0, y0, w0, h0, 860, 480)
-            write_boxes_to_txt(0, x, y, w, h, text_dir + f"/{timestamp}_{image[:-4]}.txt")
+            write_boxes_to_txt(0, x, y, w, h, text_dir + f"/{image[:-4]}.txt")
 
 
 if __name__ == "__main__":
     image_path = "./colour_map_images/02-08-2021_20-14-52"
-    # bin_img = binary_image(image_pat + "/2.jpg")
-    # x0,y0,w0,h0 = find_bounding_box(bin_img)
-    # x,y,w,h = scale_bounding_box(x0,y0,w0,h0,860,480)
-    # print(x,y,w,h)
-    # write_boxes_to_txt(0,x,y,w,h,image_path+"/test_chicken.txt")
     find_all_bounding_boxes(image_path,"02-08-2021_20-14-52")

@@ -1,6 +1,6 @@
 ### DEBUG TOOLS
 
-* [ ] Fix spawn_mob functions to specify x/y/z positions
+* [x] Fix spawn_mob functions to specify x/y/z positions
 * [ ] Off-limits mob
   * [ ] Create trap for mob or mob that doesn't move much
 * [ ] World reset to remove existing mobs
@@ -9,13 +9,10 @@
 * Bounding boxes around the difference in area
 * OpenCV function to make bounding box: [link](https://docs.opencv.org/3.1.0/dd/d49/tutorial_py_contour_features.html)
 
-### TODO for Saturday
+### TODO for Friday
 
 ---
 
-* [ ] Create a python script that converts the color-map into preset format
-  * Input: Color-bit-map from Malmo's frames
-  * Output: a 1x5 array of positions [classname, top_left, bottom_left, top_right, bottom_right]
 * [ ] Use the labeled data, plus our custom images to train our custom model [link](https://github.com/eriklindernoren/PyTorch-YOLOv3)
 * [ ] Test our model (with new unseen images) and compare the error (error metric still in the works)
 
@@ -23,6 +20,7 @@
 
 ---
 
+* Create better color representation with clustering
 * Then replicate the entire process with different objects (w/ different colors) in minecraft (like pigs, trees)
 * Try using the same object multiple times (clone/duplicity)
 * [ ] Have another pre-trained model (that isn't YOLOv.3) so we can compare two different models and the ground truth ("color image set")
@@ -61,6 +59,9 @@
   * For testing purposes if we can downscale, reduce the size of the images
 * [x] Integrate the color map from the example (team_reward_test.py) into Phoenix.py put the color map outputs to /videos/ directory
 * [x] Create a bash script that uses the python script for all images created by frame-splitting
+* [x] Create a python script that converts the color-map into preset format
+  * Input: Color-bit-map from Malmo's frames
+  * Output: a 1x5 array of positions [classname, top_left, bottom_left, top_right, bottom_right]
 
 ### Largest Hurdle [Fixed]
 
