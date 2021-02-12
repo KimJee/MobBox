@@ -97,7 +97,7 @@ def find_bounding_box(bin_img, color_image):
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
 
-    return x,y,w,h
+    return x+(w/2),y+(h/2),w,h
 
 
 def scale_bounding_box(x, y, w, h, img_w, img_h):
@@ -106,7 +106,7 @@ def scale_bounding_box(x, y, w, h, img_w, img_h):
 
 def write_boxes_to_txt(classification, x, y, w, h, textfile_name):
     file = open(textfile_name, "a")
-    file.write(f"{classification} {x} {y} {w} {h}\n")
+    file.write(f"{classification} {x} {y} {w} {h}")
 
 
 def find_all_bounding_boxes(image_dir_path, timestamp):
