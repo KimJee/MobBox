@@ -34,8 +34,6 @@ theme: minima
 plugins:
   - jekyll-feed
 
-<<<<<<< Updated upstream
-#########################
 # more settings
 
 markdown: kramdown
@@ -45,7 +43,6 @@ exclude:
 - LICENSE.md
 
 theme: jekyll-theme-cayman
-=======
 # Exclude from processing.
 # The following items will not be processed, by default.
 # Any item listed under the `exclude:` key here will be automatically added to
@@ -65,4 +62,3 @@ theme: jekyll-theme-cayman
 #   - vendor/cache/
 #   - vendor/gems/
 #   - vendor/ruby/
->>>>>>> Stashed changes
