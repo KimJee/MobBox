@@ -68,7 +68,7 @@ def use_kMeans_to_find_median_color():
 """
 def create_train_txt_file(filepath: "directory to be parsed through"):
 
-    PREPEND_FILE_PATH = "data/custom/images/"
+    PREPEND_FILE_PATH = "./images/chicken/"
     output_file = open("train.txt", "w")
     files = os.listdir(filepath) # Creates a list of files
     print(files)
@@ -94,7 +94,7 @@ def run():
     #EXPECTED_NUMBER_OF_COLORS = 100
     #result_array = process_image_into_color_frequency(TEST_FILE_PATH, EXPECTED_NUMBER_OF_COLORS)
     #print(result_array)
-    FILE_TO_COLOR_IMAGES_DIR = "./video_images/02-11-2021_01-24-45"
+    FILE_TO_COLOR_IMAGES_DIR = "./video_images/chickentest/02-11-2021_22-27-51_image"
     create_train_txt_file(FILE_TO_COLOR_IMAGES_DIR)
 
 

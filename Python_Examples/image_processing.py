@@ -104,9 +104,10 @@ def scale_bounding_box(x, y, w, h, img_w, img_h):
     return x/img_w, y/img_h, w/img_w, h/img_h
 
 
-def write_boxes_to_txt(classification, x, y, w, h, textfile_name):
+def write_box_to_txt(classification, x, y, w, h, textfile_name):
     file = open(textfile_name, "a")
     file.write(f"{classification} {x} {y} {w} {h}")
+    file.close()
 
 
 def find_all_bounding_boxes(image_dir_path, timestamp):
@@ -121,9 +122,72 @@ def find_all_bounding_boxes(image_dir_path, timestamp):
             bin_img = binary_image(image_dir_path + "/" + image)
             x0, y0, w0, h0 = find_bounding_box(bin_img, "./video_images/" + timestamp + "/" + image)
             x, y, w, h = scale_bounding_box(x0, y0, w0, h0, 860, 480)
-            write_boxes_to_txt(0, x, y, w, h, text_dir + f"/{image[:-4]}.txt")
+            write_box_to_txt(0, x, y, w, h, text_dir + f"/{image[:-4]}.txt")
+
+
+def center_to_ul_br(x_center,y_center,w,h,img_w,img_h):
+    return round((x_center - w / 2) * img_w), round((y_center - h / 2) * img_h), \
+           round((x_center + w / 2) * img_w), round((y_center + h / 2) * img_h)
+
+
+def read_box_from_txt_yolov3(text_path, ):
+    boxes = []
+    file = open(text_path, "r")
+    for line in file:
+        boxes.append([float(i) for i in line.split(" ")][1:5])
+    file.close()
+    return boxes
+
+
+def draw_bounding_box(image_path, boxes):
+    """
+    Take str of image path and 2D array of box dimensions
+    Each box is represented by [upper left x, upper left y, lower right x, lower right y]
+    """
+    img = cv2.imread(image_path)
+    for box in boxes:
+        x1,y1,x2,y2 = center_to_ul_br(box[0],box[1],box[2],box[3],860,480)
+        cv2.rectangle(img,(x1, y1),(x2, y2),(0,255,0),2)
+    cv2.imshow("Bounding box", img)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+
+# code from: https://gist.github.com/meyerjo/dd3533edc97c81258898f60d8978eddc
+def intersection_over_union(boxA, boxB):
+    # determine the (x, y)-coordinates of the intersection rectangle
+    xA = max(boxA[0], boxB[0])
+    yA = max(boxA[1], boxB[1])
+    xB = min(boxA[2], boxB[2])
+    yB = min(boxA[3], boxB[3])
+
+    # compute the area of intersection rectangle
+    interArea = abs(max((xB - xA, 0)) * max((yB - yA), 0))
+    if interArea == 0:
+        return 0
+    # compute the area of both the prediction and ground-truth
+    # rectangles
+    boxAArea = abs((boxA[2] - boxA[0]) * (boxA[3] - boxA[1]))
+    boxBArea = abs((boxB[2] - boxB[0]) * (boxB[3] - boxB[1]))
+
+    # compute the intersection over union by taking the intersection
+    # area and dividing it by the sum of prediction + ground-truth
+    # areas - the interesection area
+    iou = interArea / float(boxAArea + boxBArea - interArea)
+
+    # return the intersection over union value
+    return iou
 
 
 if __name__ == "__main__":
-    image_path = "./colour_map_images/02-08-2021_20-14-52"
-    find_all_bounding_boxes(image_path,"02-08-2021_20-14-52")
+    for img in [11,98,200]:
+        image_path = f"./test_boxes/02-11-2021_22-27-51_{img}.jpg"
+        box_path = f"./test_boxes/02-11-2021_22-27-51_{img}.txt"
+        label_path = f"./test_boxes/labels/02-11-2021_22-27-51_{img}.txt"
+        pred = read_box_from_txt_yolov3(box_path)
+        label = read_box_from_txt_yolov3(label_path)
+        draw_bounding_box(image_path, pred)
+        draw_bounding_box(image_path, label)
+        print(intersection_over_union(label[0],pred[0]))
+
+    # find_all_bounding_boxes(image_path,"02-08-2021_20-14-52")
