@@ -32,7 +32,7 @@ def parse_video(video_path, timestamp):
         success = True
         count = 0
         while success:
-            cap.set(cv2.CAP_PROP_POS_MSEC, count*FRAME_PARAM)  # 8 fps
+            cap.set(cv2.CAP_PROP_POS_MSEC, count*FRAME_PARAM)
             success, image = cap.read()
             if success:
                 cv2.imwrite(image_dir_path + f"/{timestamp}_{count}.jpg", image)
@@ -41,8 +41,28 @@ def parse_video(video_path, timestamp):
     return "./colour_map_images/" + timestamp
 
 
-def merge_images():
-    pass
+# code based on: https://theailearner.com/2018/10/15/creating-video-from-images-using-opencv-python/
+def merge_images(image_dir,video_name,fps):
+    """
+    Writes video file with name video_name of images from specified directory
+    Images will be sorted into alphanumeric order
+    """
+    img_array = []
+    sorted_dir = sorted(os.listdir(image_dir))
+    sorted_dir.sort(key=lambda img:len(img))
+    for filename in sorted_dir:
+        if filename.endswith(".jpg"):
+            img = cv2.imread(image_dir+filename)
+            height, width, layers = img.shape
+            size = (width, height)
+            img_array.append(img)
+
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    out = cv2.VideoWriter(video_name+'.mp4', fourcc, fps, size)
+
+    for i in range(len(img_array)):
+        out.write(img_array[i])
+    out.release()
 
 
 def binary_image(image_path):
@@ -134,7 +154,7 @@ def center_to_ul_br(boxes,img_w,img_h):
     return ul_br_boxes
 
 
-def read_box_from_txt_yolov3(text_path):
+def read_box_from_txt(text_path):
     boxes = []
     file = open(text_path, "r")
     for line in file:
@@ -143,21 +163,48 @@ def read_box_from_txt_yolov3(text_path):
     return boxes
 
 
-def draw_bounding_box(image_path, boxes):
+def read_all_box_from_txt(text_path, format_string):
+    boxes = []
+    sorted_dir = sorted(os.listdir(text_path))
+    sorted_dir.sort(key=lambda img: len(img))
+    for box in sorted_dir:
+        print(box)
+        bb = read_box_from_txt(text_path+box)
+        if format_string == 'CENTER':
+            bb = center_to_ul_br(bb,860,480)
+        boxes.append(bb)
+    return boxes
+
+
+def draw_bounding_box(image_name, image_path, pred, label, timestamp):
     """
     Take str of image path and 2D array of box dimensions
     Each box is represented by [upper left x, upper left y, lower right x, lower right y]
     """
-    img = cv2.imread(image_path)
-    for box in boxes:
-        cv2.rectangle(img,(box[0], box[1]),(box[2], box[3]),(0,255,0),2)
-    cv2.imshow("Bounding box", img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    output_dir = "./bounding_box_images/" + timestamp + "/"
+    try:
+        os.makedirs(output_dir)
+    except OSError as exception:
+        pass
+
+    img = cv2.imread(image_path + image_name)
+    for i in range(len(label)):
+        # box = label[i]
+        # cv2.rectangle(img, (box[0], box[1]), (box[2], box[3]), (0, 0, 255), 2)
+        box = pred[i]
+        cv2.rectangle(img, (box[0], box[1]), (box[2], box[3]), (0, 255, 0), 2)
+
+    # cv2.imshow("Bounding box", img)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
+    cv2.imwrite(output_dir + image_name, img)
 
 
 # code from: https://gist.github.com/meyerjo/dd3533edc97c81258898f60d8978eddc
 def intersection_over_union(boxA, boxB):
+    """
+    Each box is represented by [upper left x, upper left y, lower right x, lower right y]
+    """
     # determine the (x, y)-coordinates of the intersection rectangle
     xA = max(boxA[0], boxB[0])
     yA = max(boxA[1], boxB[1])
@@ -182,15 +229,28 @@ def intersection_over_union(boxA, boxB):
     return iou
 
 
-if __name__ == "__main__":
-    for img in [11,98,200]:
-        image_path = f"./test_boxes/02-11-2021_22-27-51_{img}.jpg"
-        box_path = f"./test_boxes/02-11-2021_22-27-51_{img}.txt"
-        label_path = f"./test_boxes/labels/02-11-2021_22-27-51_{img}.txt"
-        pred = center_to_ul_br(read_box_from_txt_yolov3(box_path), 860, 480)
-        label = center_to_ul_br(read_box_from_txt_yolov3(label_path), 860, 480)
-        draw_bounding_box(image_path, pred)
-        draw_bounding_box(image_path, label)
-        print(intersection_over_union(label[0],pred[0]))
+def create_bounding_box_images(timestamp, format_string):
+    """
+    Create a directory in Python_Examples called pred_bounding_boxes and
+    create a directory inside of pred_bounding_boxes named with your timestamp.
+    Insert your bounding box predicions text files into the timestamp folder
+    before running this function
 
-    # find_all_bounding_boxes(image_path,"02-08-2021_20-14-52")
+    :param image_path: video image directory
+    :param pred_path: predicted bounding box text file directory
+    :param label_path: actual bounding box text file directory
+    :param output_path: directory to save images with bounding boxes
+    :param format_string: COCO, VOC, or CENTER
+    """
+    pred = read_all_box_from_txt(f"./pred_bounding_boxes/{timestamp}/", format_string)
+    label = read_all_box_from_txt(f"./bounding_boxes/{timestamp}/", format_string)
+
+    image_dir = os.listdir(f"./video_images/{timestamp}/")
+    for i in range(len(image_dir)):
+        draw_bounding_box(image_dir[i],f"./video_images/{timestamp}/",pred[i],label[i],timestamp)
+
+
+if __name__ == "__main__":
+
+    create_bounding_box_images("02-12-2021_21-09-06","CENTER")
+    merge_images("./bounding_box_images/02-12-2021_21-09-06/","chickentestvideo",10)
