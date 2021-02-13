@@ -8,7 +8,7 @@ chicken = np.array([36, 195, 175])
 
 def parse_video(video_path, timestamp):
 
-    WANTED_FRAME_PER_SECOND = 1
+    WANTED_FRAME_PER_SECOND = 10
     FRAME_PARAM = 1000 // WANTED_FRAME_PER_SECOND # 1 frame per second
 
     videos = []

@@ -171,7 +171,11 @@ def run():
     agent_host = MalmoPython.AgentHost()                  # Create our agent_host
     my_xml = get_xml()                                    # Grabs the xml "environment-settings"
     my_mission = MalmoPython.MissionSpec(my_xml, True)    # Describes the mission specifications
+<<<<<<< HEAD
     my_mission.timeLimitInSeconds(15)                     # Describes the time limit for the mission
+=======
+    my_mission.timeLimitInSeconds(22)                     # Describes the time limit for the mission
+>>>>>>> master
     my_mission_record = recordDualStream()                # Records both regular video & color-map onto /video/ directory
     do_mission(agent_host, my_mission, my_mission_record) # Starts and runs mission loop
     image_dir = ip.parse_video(VIDEO_FILE_PATH, TIMESTAMP)
