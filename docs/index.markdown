@@ -5,10 +5,7 @@
 layout: home
 ---
 
-# Proposal
+# Landing Page
 
-# Status Update
-
-# Final
 
 
