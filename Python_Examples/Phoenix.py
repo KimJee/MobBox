@@ -115,15 +115,15 @@ def get_xml():
             </Mission>'''
 
 
-def recordDualStream():
+def recordDualStream(fps):
     my_mission_record = MalmoPython.MissionRecordSpec(VIDEO_FILE_PATH)
 
     my_mission_record.recordRewards()
     my_mission_record.recordCommands()
     my_mission_record.recordObservations()
 
-    my_mission_record.recordMP4(MalmoPython.FrameType.COLOUR_MAP, 24, 2000000, False)
-    my_mission_record.recordMP4(MalmoPython.FrameType.VIDEO, 24, 2000000, False)
+    my_mission_record.recordMP4(MalmoPython.FrameType.COLOUR_MAP, fps, 2000000, False)
+    my_mission_record.recordMP4(MalmoPython.FrameType.VIDEO, fps, 2000000, False)
     return my_mission_record
 
 def do_mission(agent_host, my_mission, my_mission_record):
@@ -172,7 +172,7 @@ def run():
     my_xml = get_xml()                                    # Grabs the xml "environment-settings"
     my_mission = MalmoPython.MissionSpec(my_xml, True)    # Describes the mission specifications
     my_mission.timeLimitInSeconds(22)                     # Describes the time limit for the mission
-    my_mission_record = recordDualStream()                # Records both regular video & color-map onto /video/ directory
+    my_mission_record = recordDualStream(10)                # Records both regular video & color-map onto /video/ directory
     do_mission(agent_host, my_mission, my_mission_record) # Starts and runs mission loop
     image_dir = ip.parse_video(VIDEO_FILE_PATH, TIMESTAMP)
     ip.find_all_bounding_boxes(image_dir, TIMESTAMP)
