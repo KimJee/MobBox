@@ -17,8 +17,6 @@ from pprint import pprint
 import lxml
 from lxml import etree as et
 
-import image_processing 
-
 """
     Returns BGR Order
 """
@@ -101,7 +99,7 @@ def create_train_txt_file(filepath: "directory to be parsed through"):
 
 # Creates the file structure for ImageAI
 def create_endpoint():
-    IMAGE_AI_ROOT_PATH = "./ImageAI/"
+    IMAGE_AI_ROOT_PATH = "ImageAI_rsc/"
     create_dir(IMAGE_AI_ROOT_PATH)
     
     os.chdir(IMAGE_AI_ROOT_PATH) # Changes directory to be within Image_ai
@@ -224,7 +222,7 @@ def mad_libs_xml(foldername: str, filename: str, full_path: str, object_name: st
 
 
 def getImageData(_filename: "Last Ending Path to the exact image"):
-    print("getImageData(): " + os.getcwd() + "/" + _filename)
+    #print("getImageData(): " + os.getcwd() + "/" + _filename)
     if (os.path.exists("./" + _filename)):
         image = cv2.imread("./" + _filename)
         HEIGHT, WIDTH, COLOR = image.shape
@@ -313,10 +311,11 @@ def binary_image(image_path, _COLOR_TRIPLET):
 
 
 def write_xml_to_file(_filename: str, _XML_NODE: "lxml Node"):
+    print(f"Processing {_filename}...")
     #print(et.tostring(root, pretty_print=True).decode("utf-8")) 
     os.chdir("../annotations")   # Go up a level back to the {images, colormaps, annotations}
     tree = et.ElementTree(_XML_NODE)
-    tree.write(_filename + ".xml")
+    tree.write(_filename[:-4] + ".xml")
 
     
 
@@ -327,9 +326,19 @@ def ImageAI_setup():
     os.chdir("./images") # Returns back to the image directory
     dirpath, dirnames, filenames = next(walk(os.getcwd())) # Grabs a list of filenames and the dir_path
     
-    # print("Dirpath is: " + dirpath)
-    # For each image within the images directory    
+    # For each image within the images directory  
+    print("Creating annotation files...")  
     for _filename in filenames:
+        
+        # Grabs the parent directory
+        xml_ext = "/annotations/" + _filename[:-4] + ".xml"
+        parent = os.path.dirname(os.getcwd()) 
+        xml_path = parent + xml_ext
+
+        #print(xml_path)
+        if (os.path.exists(xml_path)):
+            continue
+        
 
         # Data for the mad-libs
         _full_path = dirpath + "/" + _filename
@@ -344,7 +353,7 @@ def ImageAI_setup():
 
         # Brings us back to the images file
         os.chdir("../images")
-
+    print("Done!")
 
     # Design Question: What should we do about the object_name?
         # As of right now there's only 1 "classification, but we may want to have multiple ones?"
@@ -356,6 +365,9 @@ def ImageAI_setup():
 
     
     
+from imageai.Detection.Custom import DetectionModelTrainer
+# Trains the model using our dataset
+from imageai.Detection.Custom import CustomObjectDetection
 
 def run():
     #TEST_FILE_PATH = "./19.jpg" # Testing file on my local directory
@@ -364,8 +376,39 @@ def run():
     #print(result_array)
     #FILE_TO_COLOR_IMAGES_DIR = "./video_images/02-11-2021_01-24-45"
     #create_train_txt_file(FILE_TO_COLOR_IMAGES_DIR)
+
+    """
+        (1) Load color_map images in the directory 'input_color_map_images"
+        (2) Load regular images in the directory 'images'
+        (3) Run the ImageAI_module script 
+    """
     ImageAI_setup()
 
+    os.chdir("../")
+
+    detector = CustomObjectDetection()
+    detector.setModelTypeAsYOLOv3()
+    detector.setModelPath("./models/holo-lens-model-deriv/detection_model-ex-025--loss-0000.407.h5")
+    detector.setJsonPath("./json/detection_config.json")
+    detector.loadModel()
+    detections = detector.detectObjectsFromImage(input_image="./images/02-11-2021_22-27-51_352.jpg", output_image_path="./output.jpg")
+    
+    for detection in detections:
+        print(detection["name"], " : ", detection["percentage_probability"], " : ", detection["box_points"])
+    # trainer = DetectionModelTrainer()
+    # trainer.setModelTypeAsYOLOv3()
+    # trainer.setDataDirectory(data_directory="")
+    # print("HELLO WORLD" + os.getcwd())  
+    # trainer.setTrainConfig(object_names_array=["chicken"], batch_size=2, num_experiments=50, train_from_pretrained_model="./models/resnet50_coco_best_v2.1.0.h5", )
+    # # In the above,when training for detecting multiple objects,
+    # #set object_names_array=["object1", "object2", "object3",..."objectz"]
+    # trainer.trainModel()
+
+
+    #metrics = trainer.evaluateModel(model_path="hololens/models", json_path="hololens/json/detection_config.json", iou_threshold=0.5, object_threshold=0.3, nms_threshold=0.5)
+    #print(metrics)
+
+    # Detect from the images
 
 
 if (__name__ == "__main__"):
