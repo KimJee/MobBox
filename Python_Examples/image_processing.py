@@ -125,12 +125,16 @@ def find_all_bounding_boxes(image_dir_path, timestamp):
             write_box_to_txt(0, x, y, w, h, text_dir + f"/{image[:-4]}.txt")
 
 
-def center_to_ul_br(x_center,y_center,w,h,img_w,img_h):
-    return round((x_center - w / 2) * img_w), round((y_center - h / 2) * img_h), \
-           round((x_center + w / 2) * img_w), round((y_center + h / 2) * img_h)
+def center_to_ul_br(boxes,img_w,img_h):
+    ul_br_boxes = []
+    for box in boxes:
+        x_center, y_center, w, h = box[0],box[1],box[2],box[3]
+        ul_br_boxes.append([round((x_center - w / 2) * img_w), round((y_center - h / 2) * img_h),
+                            round((x_center + w / 2) * img_w), round((y_center + h / 2) * img_h)])
+    return ul_br_boxes
 
 
-def read_box_from_txt_yolov3(text_path, ):
+def read_box_from_txt_yolov3(text_path):
     boxes = []
     file = open(text_path, "r")
     for line in file:
@@ -146,8 +150,7 @@ def draw_bounding_box(image_path, boxes):
     """
     img = cv2.imread(image_path)
     for box in boxes:
-        x1,y1,x2,y2 = center_to_ul_br(box[0],box[1],box[2],box[3],860,480)
-        cv2.rectangle(img,(x1, y1),(x2, y2),(0,255,0),2)
+        cv2.rectangle(img,(box[0], box[1]),(box[2], box[3]),(0,255,0),2)
     cv2.imshow("Bounding box", img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
@@ -184,8 +187,8 @@ if __name__ == "__main__":
         image_path = f"./test_boxes/02-11-2021_22-27-51_{img}.jpg"
         box_path = f"./test_boxes/02-11-2021_22-27-51_{img}.txt"
         label_path = f"./test_boxes/labels/02-11-2021_22-27-51_{img}.txt"
-        pred = read_box_from_txt_yolov3(box_path)
-        label = read_box_from_txt_yolov3(label_path)
+        pred = center_to_ul_br(read_box_from_txt_yolov3(box_path), 860, 480)
+        label = center_to_ul_br(read_box_from_txt_yolov3(label_path), 860, 480)
         draw_bounding_box(image_path, pred)
         draw_bounding_box(image_path, label)
         print(intersection_over_union(label[0],pred[0]))
