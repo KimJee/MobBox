@@ -21,9 +21,8 @@
 title: Project Phoenix 
 email: jeehk8@uci.edu npinpin@uci.edu 
 description: >- # this means to ignore newlines until "baseurl:"
-  Our mission is to process JPG images taken from the agents’ perspective and identify specific Minecraft mobs within the image.
-  We not only want to identify what type of mobs there are (classic image prediction problem) but also where the mob is within an image, drawing a bounding box around it (object detection problem).
-  We want our agent to be able to identify different mob species (pigs, cows, chicken, etc) and distinguish between multiple “instances” of the same mobs (e.g. two chickens in a single image).
+  Project Phoenix Website
+
 baseurl: "/Phoenix" # the subpath of your site, e.g. /blog
 url: "https://kimjee.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: jekyllrb
