@@ -5,7 +5,17 @@ title:  Home
 
 **A pre-trained convolutional neural networked designed to see mobs in Minecraft!**
 
-![MC Chicken](img/image2.png "Diagram for Proposal")
+### From this
+
+![Alt Text](img/chicken-model.gif)
+
+###  To this
+
+![Alt Text](img/chicken-model-improved.gif)
+
+
+
+![Colormap Chicken](img/image3.png "Diagram for Proposal")
 
 We first grab two images, one "RAW" frame from the game.
 
@@ -26,6 +36,12 @@ Then after some training...
 ![Final Bounding Box](img/image6.png "Diagram for Proposal")
 
 We create model that can detect where the mob is on the screen.
+
+
+### Meeting Times
+
+Group Meetings: Thursday at 6:30pm and Saturday at 6:30pm
+
 
 ### Resources
 
@@ -48,7 +64,7 @@ We create model that can detect where the mob is on the screen.
 * [Overview of CNNs](https://towardsdatascience.com/a-comprehensive-guide-to-convolutional-neural-networks-the-eli5-way-3bd2b1164a53?gi=2a61e97f5a9d)
 
 
-Reports:
+### Reports:
 
 * [Proposal](proposal.html)
 * [Status](status.html)
