@@ -9,7 +9,7 @@ title:  Home
 
 ![Alt Text](img/chicken-model.gif)
 
-###  To this
+### To this
 
 ![Alt Text](img/chicken-model-improved.gif)
 
@@ -26,12 +26,7 @@ And another "Color" frame from Malmo's colormap.
 ![IOU Box](img/image1.png "Diagram for Proposal")
 
 We then train the model using the intersection-over-union metric.
-
-![Chart1](img/image4.png "Diagram for Proposal")
-![Chart2](img/image5.png "Diagram for Proposal")
-
 Then after some training...
-
 
 ![Final Bounding Box](img/image6.png "Diagram for Proposal")
 
