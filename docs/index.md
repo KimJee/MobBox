@@ -3,9 +3,6 @@ layout: default
 title:  Home
 ---
 
-### Mobbox
----
-
 **A pre-trained convolutional neural networked designed to see mobs in Minecraft!**
 
 ![MC Chicken](img/image2.png "Diagram for Proposal")
