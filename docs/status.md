@@ -3,6 +3,9 @@ layout: default
 title: Status Update
 ---
 
+[![Our Status Video](http://img.youtube.com/vi/xJWeUX-vPIA/0.jpg)](https://www.youtube.com/watch?v=xJWeUX-vPIA "Youtube Link")
+
+
 ## Project Summary
 
 ---
@@ -26,7 +29,6 @@ We utilized this [YOLO](https://github.com/ultralytics/yolov3) library. YOLO sta
 The idea of “convolution” is to ‘filter’ over an image to create a feature map that summarizes the detected features in the input. Think of each image as a stage and each “convolution” is a spotlight that tries to pick up different details of the stage. For example, one layer could see the actors, another could see the backdrop, and by piecing together these “features,” it blends these ideas to understand what is happening. The authors also upsample feature-rich portions of the image which allows for more information per pixel. In the last leg of prediction, they use k-means clustering to determine the bounding box.
 
 We used the provided YOLOv3 model with transfer learning. YOLOv3 comes with its own weights that define their pretrained model; with transfer learning, we customize their weights by training it further to complete our specific object detection task. In order to customize the model to detect mobs on Minecraft, we first generated a dataset of training and validation images and the images’ corresponding ground truth bounding boxes. These images were created by parsing a video created by the Malmo video producer. Two versions of the video were produced: a normal video of what is seen on Minecraft and a colormap video that blocks each entity/block into different solid colors. The colormap is used to create the ground truth bounding boxes. Using the YOLOv3 weights as a starting point, we then trained our model, modifying their weights to fit our data. Our current model has run a total of 20 epochs on about 300 training images.
-
 
 ![MC Chicken](img/image2.png "Diagram for Proposal")
 ![Colormap Chicken](img/image3.png "Diagram for Proposal")
@@ -55,13 +57,14 @@ The mAP is a metric for the accuracy of an object detection model. It is represe
 
 Below are graphs for our trained model after 5 epochs (mAP=0.01149) compared to after 20 epochs (mAP=0.8315).
 
-
 ![Chart1](img/image4.png "Chart1")
 ![Chart2](img/image5.png "Chart2")
 
 To **qualitatively** assess our model, we are able to use OpenCV to draw our bounding boxes on top of the images. We can look at the visual accuracy of the bounding boxes as well as the consistency across many frames of a video (see our video summary).
 
 ## Remaining Goals & Challenges
+
+---
 
 Our main long term goal is for our model to identify different types of mobs. As of right now, the only object our model can detect is a chicken. We also could expand the model to identify different types of blocks as well (like finding trees). The other main goal is for our agent to detect multiple instances of the same mob in a single frame.
 
