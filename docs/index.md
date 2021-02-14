@@ -3,7 +3,7 @@ layout: default
 title:  Home
 ---
 
-Source code: https://github.com/KimJee/Phoenix
+(Source code)[https://github.com/KimJee/Phoenix]
 
 Reports:
 
@@ -12,7 +12,7 @@ Reports:
 - [Final](final.html)
 
 
-## Welcome to Natalia & Jee's Project for CS175
+# Welcome to Natalia & Jee's Project for CS175
 ---
 * Authors: Jee Kim & Natalia Pinpin
 
