@@ -5,23 +5,15 @@ title:  Home
 
 **A pre-trained convolutional neural networked designed to see mobs in Minecraft!**
 
-### From this
+## From this, to this!
 
 ![Alt Text](img/chicken-model.gif)
-
-### To this
-
 ![Alt Text](img/chicken-model-improved.gif)
 
-
-
+![Colormap Chicken](img/image2.png "Diagram for Proposal")
 ![Colormap Chicken](img/image3.png "Diagram for Proposal")
 
-We first grab two images, one "RAW" frame from the game.
-
-![Colormap Chicken](img/image3.png "Diagram for Proposal")
-
-And another "Color" frame from Malmo's colormap.
+We grab the two images.
 
 ![IOU Box](img/image1.png "Diagram for Proposal")
 
@@ -58,10 +50,8 @@ Group Meetings: Thursday at 6:30pm and Saturday at 6:30pm
 
 * [Overview of CNNs](https://towardsdatascience.com/a-comprehensive-guide-to-convolutional-neural-networks-the-eli5-way-3bd2b1164a53?gi=2a61e97f5a9d)
 
-
 ### Reports:
 
 * [Proposal](proposal.html)
 * [Status](status.html)
 * [Final](final.html)
-

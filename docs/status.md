@@ -3,8 +3,6 @@ layout: default
 title: Status Update
 ---
 
-
-
 <iframe width="1061" height="597" src="https://www.youtube.com/embed/xJWeUX-vPIA"
 frameborder="0" allow="accelerometer; autoplay; clipboard-write;
 encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -85,8 +83,6 @@ The biggest struggle we anticipate is the duration of time taken to train our mo
 
 ## Resources Used
 
-### Code docs
-
 ### AI/ML Libraries & Models & Code
 
 * [Link to main YOLOv3 algorithm](https://github.com/ultralytics/yolov3)
@@ -111,5 +107,5 @@ The biggest struggle we anticipate is the duration of time taken to train our mo
 
 * [ImageAI Object Detection](https://stackabuse.com/object-detection-with-imageai-in-python/)
 * [Evaluating Object Detection Models](https://manalelaidouni.github.io/manalelaidouni.github.io/Evaluating-Object-Detection-Models-Guide-to-Performance-Metrics.html#precision---recall-and-the-confidence-threshold)
-* [Another tutorial about object detection models ](https://towardsdatascience.com/chess-rolls-or-basketball-lets-create-a-custom-object-detection-model-ef53028eac7d)
+* [Another tutorial about object detection models](https://towardsdatascience.com/chess-rolls-or-basketball-lets-create-a-custom-object-detection-model-ef53028eac7d)
 * [Jonathan Hui's blog](https://jonathan-hui.medium.com/)
