@@ -5,11 +5,10 @@ title:  Home
 
 # Welcome to Natalia & Jee's Project for CS175
 ---
-* Authors: Jee Kim & Natalia Pinpin
 
+![CNNImage](img/image1.png "Diagram of CNN")
 
-
-# Resources
+### Resources
 (Source code)[https://github.com/KimJee/Phoenix]
 
 Reports:
