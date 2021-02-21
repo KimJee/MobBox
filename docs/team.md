@@ -12,5 +12,5 @@ title:  Team
 ## Natalia Pinpin 
 ***UCI Net ID***: npinpin 
 
-## USER 3
-***UCI Net ID***: ucinetid3 (TBD)
+## Linxuan Han
+***UCI Net ID***: linxuanh
