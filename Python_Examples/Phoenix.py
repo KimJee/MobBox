@@ -84,7 +84,7 @@ def get_xml():
                         <Weather>clear</Weather>
                     </ServerInitialConditions>
                     <ServerHandlers>
-                        <FlatWorldGenerator generatorString="3;7,2;1;"/>
+                        <FlatWorldGenerator generatorString="3;7,59*1,3*3,2;1;stronghold,biome_1,village,decoration,dungeon,lake,mineshaft,lava_lake"/>
                         <DrawingDecorator>''' + \
                         spawn_entity_in_front("Cow", 5, 3) + \
                         spawn_entity_in_front(MOB_TYPE, 0 , 3) + \
@@ -93,7 +93,7 @@ def get_xml():
                     </ServerHandlers>
                 </ServerSection>
 
-                <AgentSection mode="Spectator">
+                <AgentSection mode="Survival">
                     <Name>CS175Test</Name>
                     <AgentStart>
                         <Placement x="0" y="2" z="0" pitch="0" yaw="0"/>
@@ -171,11 +171,11 @@ def run():
     agent_host = MalmoPython.AgentHost()                  # Create our agent_host
     my_xml = get_xml()                                    # Grabs the xml "environment-settings"
     my_mission = MalmoPython.MissionSpec(my_xml, True)    # Describes the mission specifications
-    my_mission.timeLimitInSeconds(22)                     # Describes the time limit for the mission
+    #my_mission.timeLimitInSeconds(22)                     # Describes the time limit for the mission
     my_mission_record = recordDualStream(10)                # Records both regular video & color-map onto /video/ directory
     do_mission(agent_host, my_mission, my_mission_record) # Starts and runs mission loop
-    image_dir = ip.parse_video(VIDEO_FILE_PATH, TIMESTAMP)
-    ip.find_all_bounding_boxes(image_dir, TIMESTAMP)
+    #image_dir = ip.parse_video(VIDEO_FILE_PATH, TIMESTAMP)
+    #ip.find_all_bounding_boxes(image_dir, TIMESTAMP)
 
 if __name__ == "__main__":
     run()
