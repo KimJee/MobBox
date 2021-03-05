@@ -95,13 +95,14 @@ def find_bounding_box(bin_img, color_image, format_string):
     for contour in contours:
         _,_,w,h = cv2.boundingRect(contour)
         if w * h >= 25:
-            max = np.amax(contour,axis=0)[0]
-            min = np.amin(contour,axis=0)[0]
+            max_pos = np.amax(contour,axis=0)[0]
+            min_pos = np.amin(contour,axis=0)[0]
 
-            # print(max, min)cd ..
+            # print(max, min)
 
             buf = 5
-            x,y,w,h = min[0]-buf, min[1]-buf, max[0]-min[0]+2*buf, max[1]-min[1]+2*buf
+            x,y = max(0,min_pos[0]-buf), max(0,min_pos[1]-buf)
+            w,h = min(430,max_pos[0]+buf)-x, min(max_pos[1]+buf,240)-y
 
             if format_string == "CENTER":
                 boxes.append([(x+(w/2))/430,(y+(h/2))/240,w/430,h/240])
