@@ -3,13 +3,20 @@ import cv2
 import numpy as np
 import tarfile
 
-chicken = np.array([36, 195, 175])
+sky = np.array([274, 205, 250])
+cloud = np.array([224, 195, 181])
+dirt = np.array([69, 45, 139])
+cow = np.array([105, 7, 1])
+
+MOB = {"chicken": 0, "cow":1}
+COLOR = {"chicken": np.array([36, 195, 175]), "cow": np.array([105, 7, 1])}
 
 
+# 256 x 256
 def parse_video(video_path, timestamp):
 
-    WANTED_FRAME_PER_SECOND = 10
-    FRAME_PARAM = 1000 // WANTED_FRAME_PER_SECOND # 1 frame per second
+    WANTED_FRAME_PER_SECOND = 2
+    FRAME_PARAM = 1000 // WANTED_FRAME_PER_SECOND
 
     videos = []
     tgz = tarfile.open(video_path, "r:gz")
@@ -35,6 +42,7 @@ def parse_video(video_path, timestamp):
             cap.set(cv2.CAP_PROP_POS_MSEC, count*FRAME_PARAM)
             success, image = cap.read()
             if success:
+                image = cv2.resize(image, (430,240))
                 cv2.imwrite(image_dir_path + f"/{timestamp}_{count}.jpg", image)
                 count += 1
 
@@ -65,90 +73,98 @@ def merge_images(image_dir,video_name,fps):
     out.release()
 
 
-def binary_image(image_path):
-    img = cv2.imread(image_path)
-    # cv2.imshow("Normal image", img)
+"""
+Functions to generate ground truth bounding boxes from images
+"""
+
+def color_threshold_binary(image, color):
+    # cv2.imshow('normal', image)
     # cv2.waitKey(0)
-    bin_img = np.empty((img.shape[0], img.shape[1]))
-
-    for row in range(img.shape[0]):
-        for col in range(img[row].shape[0]):
-            if (img[row,col,:] == chicken).all():
-                bin_img[row][col] = 1   #turn chicken white
-            else:
-                bin_img[row][col] = 0
-
-    # cv2.imshow('binary', bin_img)
+    lower_threshold = color - 50
+    upper_threshold = color + 50
+    mask = cv2.inRange(image, lower_threshold, upper_threshold)
+    # cv2.imshow("mask", mask)
     # cv2.waitKey(0)
-    return bin_img.astype(np.uint8)
+    return mask
 
 
-def find_bounding_box(bin_img, color_image):
+def find_bounding_box(bin_img, color_image, format_string):
     contours, hierarchy = cv2.findContours(bin_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    # cv2.drawContours(img, contours, -1, (0, 255, 0), 3)
-    # cv2.imshow('Contours', img)
-    # cv2.waitKey(0)
-    #print(bin_img)
-    # cnt = contours[0]
-    # print(cnt)
-    # x,y,w,h = cv2.boundingRect(cnt)
-    # cv2.rectangle(img,(x,y),(x+w,y+h),(0,255,0),2)
-    # cv2.imshow("Bounding box", img)
-    # cv2.waitKey(0)
-    #
-    # cv2.destroyAllWindows()
 
-    max_list = []
-    min_list = []
-    for pixels in contours:
-        max_list.append(np.amax(pixels, axis=0))
-        min_list.append(np.amin(pixels, axis=0))
-    max = np.amax(np.array(max_list), axis=0)[0]
-    min = np.amin(np.array(min_list), axis=0)[0]
+    boxes = []
+    for contour in contours:
+        _,_,w,h = cv2.boundingRect(contour)
+        if w * h >= 25:
+            max = np.amax(contour,axis=0)[0]
+            min = np.amin(contour,axis=0)[0]
 
-    # print(max, min)
+            # print(max, min)cd ..
 
-    buf = 4
-    x,y,w,h = min[0]-buf, min[1]-buf, max[0]-min[0]+2*buf, max[1]-min[1]+2*buf
+            buf = 5
+            x,y,w,h = min[0]-buf, min[1]-buf, max[0]-min[0]+2*buf, max[1]-min[1]+2*buf
 
-    # img = cv2.imread(color_image)
-    # cv2.rectangle(img,(x,y),(x+w,y+h),(0,255,0),2)
-    # cv2.imshow("Bounding box", img)
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
+            if format_string == "CENTER":
+                boxes.append([x+(w/2),y+(h/2),w,h])
+            elif format_string == "VOC":
+                boxes.append([x,y,x+w,y+h])
+            elif format_string == "COCO":
+                boxes.append([x,y,w,h])
 
-    return x+(w/2),y+(h/2),w,h
+            # cv2.rectangle(color_image, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            # cv2.imshow("Bounding box", color_image)
+            # cv2.waitKey(0)
+
+    return boxes
 
 
-def scale_bounding_box(x, y, w, h, img_w, img_h):
-    return x/img_w, y/img_h, w/img_w, h/img_h
+def scale_bounding_box(unscaled, img_w, img_h):
+    """ Rescaled bounding boxes to fit YOLO input format (center)"""
+    boxes = []
+    for box in unscaled:
+        boxes.append([box[0]/img_w, box[1]/img_h, box[2]/img_w, box[3]/img_h])
+    return boxes
 
 
-def write_box_to_txt(classification, x, y, w, h, textfile_name):
+def write_box_to_txt(classification, boxes, textfile_name, reset):
+    if reset:
+        open(textfile_name, 'w').close()
     file = open(textfile_name, "a")
-    file.write(f"{classification} {x} {y} {w} {h}")
+    for box in boxes:
+        file.write(f"{classification} {box[0]} {box[1]} {box[2]} {box[3]}\n")
     file.close()
 
 
-def find_all_bounding_boxes(image_dir_path, timestamp):
+def find_all_bounding_boxes(image_dir_path, timestamp, mobs, format_string):
     text_dir = "./bounding_boxes/" + timestamp
     try:
         os.makedirs(text_dir)
     except OSError as exception:
         pass
 
-    for image in sorted(os.listdir(image_dir_path)):
-        if image != ".DS_Store":    # add files that are not images
-            bin_img = binary_image(image_dir_path + "/" + image)
-            x0, y0, w0, h0 = find_bounding_box(bin_img, "./video_images/" + timestamp + "/" + image)
-            x, y, w, h = scale_bounding_box(x0, y0, w0, h0, 860, 480)
-            write_box_to_txt(0, x, y, w, h, text_dir + f"/{image[:-4]}.txt")
+    for image in os.listdir(image_dir_path):
+        if image.endswith(".jpg"):    # add files that are not images
+            reset_files = True
+            for mob in mobs:
+                img = cv2.imread(image_dir_path + "/" + image)
+                bin_img = color_threshold_binary(img, COLOR[mob])
+                unscaled = find_bounding_box(bin_img, img, format_string)
+                box = scale_bounding_box(unscaled, 430, 240)
+                write_box_to_txt(MOB[mob], box, text_dir + f"/{image[:-4]}.txt", reset_files)
+                reset_files = False
+
+
+"""
+Functions to draw bounding boxes on images
+"""
 
 
 def center_to_ul_br(boxes,img_w,img_h):
     ul_br_boxes = []
     for box in boxes:
         x_center, y_center, w, h = box[0],box[1],box[2],box[3]
+        # print(round((x_center - w / 2) * img_w), round((y_center - h / 2) * img_h),
+        #     round((x_center + w / 2) * img_w), round((y_center + h / 2) * img_h))
+        # print()
         ul_br_boxes.append([round((x_center - w / 2) * img_w), round((y_center - h / 2) * img_h),
                             round((x_center + w / 2) * img_w), round((y_center + h / 2) * img_h)])
     return ul_br_boxes
@@ -168,10 +184,9 @@ def read_all_box_from_txt(text_path, format_string):
     sorted_dir = sorted(os.listdir(text_path))
     sorted_dir.sort(key=lambda img: len(img))
     for box in sorted_dir:
-        print(box)
         bb = read_box_from_txt(text_path+box)
         if format_string == 'CENTER':
-            bb = center_to_ul_br(bb,860,480)
+            bb = center_to_ul_br(bb,430,240)
         boxes.append(bb)
     return boxes
 
@@ -189,15 +204,33 @@ def draw_bounding_box(image_name, image_path, pred, label, timestamp):
 
     img = cv2.imread(image_path + image_name)
     for i in range(len(label)):
-        # box = label[i]
-        # cv2.rectangle(img, (box[0], box[1]), (box[2], box[3]), (0, 0, 255), 2)
+        box = label[i]
+        cv2.rectangle(img, (box[0], box[1]), (box[2], box[3]), (0, 0, 255), 2)
         box = pred[i]
         cv2.rectangle(img, (box[0], box[1]), (box[2], box[3]), (0, 255, 0), 2)
 
     # cv2.imshow("Bounding box", img)
     # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
+    # # cv2.destroyAllWindows()
     cv2.imwrite(output_dir + image_name, img)
+
+
+def create_bounding_box_images(timestamp, format_string):
+    """
+    Create a directory in Python_Examples called pred_bounding_boxes and
+    create a directory inside of pred_bounding_boxes named with your timestamp.
+    Insert your bounding box prediction text files into the timestamp folder
+    before running this function
+
+    format_string: COCO, VOC, or CENTER
+    """
+    pred = read_all_box_from_txt(f"./pred_bounding_boxes/{timestamp}/", format_string)
+    label = read_all_box_from_txt(f"./bounding_boxes/{timestamp}/", format_string)
+
+    image_dir = sorted(os.listdir(f"./video_images/{timestamp}/"))
+    image_dir.sort(key=lambda img: len(img))
+    for i in range(len(image_dir)):
+        draw_bounding_box(image_dir[i],f"./video_images/{timestamp}/",pred[i],label[i],timestamp)
 
 
 # code from: https://gist.github.com/meyerjo/dd3533edc97c81258898f60d8978eddc
@@ -229,28 +262,21 @@ def intersection_over_union(boxA, boxB):
     return iou
 
 
-def create_bounding_box_images(timestamp, format_string):
-    """
-    Create a directory in Python_Examples called pred_bounding_boxes and
-    create a directory inside of pred_bounding_boxes named with your timestamp.
-    Insert your bounding box predicions text files into the timestamp folder
-    before running this function
-
-    :param image_path: video image directory
-    :param pred_path: predicted bounding box text file directory
-    :param label_path: actual bounding box text file directory
-    :param output_path: directory to save images with bounding boxes
-    :param format_string: COCO, VOC, or CENTER
-    """
-    pred = read_all_box_from_txt(f"./pred_bounding_boxes/{timestamp}/", format_string)
-    label = read_all_box_from_txt(f"./bounding_boxes/{timestamp}/", format_string)
-
-    image_dir = os.listdir(f"./video_images/{timestamp}/")
-    for i in range(len(image_dir)):
-        draw_bounding_box(image_dir[i],f"./video_images/{timestamp}/",pred[i],label[i],timestamp)
-
-
 if __name__ == "__main__":
+    find_all_bounding_boxes("./colour_map_images/03-04-2021_17-22-05","03-04-2021_17-22-05",["cow","chicken"], "CENTER")
+    create_bounding_box_images("03-04-2021_17-22-05", "CENTER")
 
-    create_bounding_box_images("02-12-2021_21-09-06","CENTER")
-    merge_images("./bounding_box_images/02-12-2021_21-09-06/","chickentestvideo",10)
+    # bin,img = color_threshold("./colour_map_images/02-12-2021_21-09-06/02-12-2021_21-09-06_10.jpg", chicken)
+
+    # find_bounding_box(bin.astype(np.uint8),img)
+    # p = read_box_from_txt("./pred_bounding_boxes/02-12-2021_21-09-06/02-12-2021_21-09-06_39.txt")
+    # gt = read_box_from_txt("./bounding_boxes/02-12-2021_21-09-06/02-12-2021_21-09-06_39.txt")
+    #
+    # a = center_to_ul_br(p,860,480)
+    # b = center_to_ul_br(gt,860,480)
+    # print(intersection_over_union(a[0],b[0]))
+
+    # create_bounding_box_images("02-12-2021_21-09-06","CENTER")
+    # merge_images("./bounding_box_images/02-12-2021_21-09-06_OLD/","chickentestvideo_ BASELINE",10)
+
+    # cv2.imwrite("binary.jpg", binary_image("./colour_map_images/02-12-2021_21-09-06/02-12-2021_21-09-06_10.jpg"))
