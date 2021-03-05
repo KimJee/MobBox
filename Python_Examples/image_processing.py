@@ -102,7 +102,7 @@ def find_bounding_box(bin_img, color_image, format_string):
 
             buf = 5
             x,y = max(0,min_pos[0]-buf), max(0,min_pos[1]-buf)
-            w,h = min(430,max_pos[0]+buf)-x, min(max_pos[1]+buf,240)-y
+            w,h = min(429,max_pos[0]+buf)-x, min(239,max_pos[1]+buf)-y
 
             if format_string == "CENTER":
                 boxes.append([(x+(w/2))/430,(y+(h/2))/240,w/430,h/240])
@@ -111,7 +111,7 @@ def find_bounding_box(bin_img, color_image, format_string):
             elif format_string == "COCO":
                 boxes.append([x,y,w,h])
 
-            # cv2.rectangle(color_image, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            # cv2.rectangle(color_image, (0, 0), (x + w, y + h), (0, 255, 0), 2)
             # cv2.imshow("Bounding box", color_image)
             # cv2.waitKey(0)
 
