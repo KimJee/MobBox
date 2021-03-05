@@ -134,7 +134,13 @@ def write_box_to_txt(classification, boxes, textfile_name, reset):
     file.close()
 
 
-def find_all_bounding_boxes(image_dir_path, timestamp, mobs, format_string):
+def find_all_bounding_boxes(timestamp, mobs, format_string):
+    """
+    timestamp: string of timestamp
+    mobs: list of strings (of mob types)e.g. ["chicken","cow"]
+    format_string: "CENTER", "VOC", or "COCO"
+    """
+    image_dir_path = "./colour_map_images/" + timestamp
     text_dir = "./bounding_boxes/" + timestamp
     try:
         os.makedirs(text_dir)
@@ -263,20 +269,5 @@ def intersection_over_union(boxA, boxB):
 
 
 if __name__ == "__main__":
-    find_all_bounding_boxes("./colour_map_images/03-04-2021_17-22-05","03-04-2021_17-22-05",["cow","chicken"], "CENTER")
+    find_all_bounding_boxes("03-04-2021_17-22-05", ["cow","chicken"], "CENTER")
     create_bounding_box_images("03-04-2021_17-22-05", "CENTER")
-
-    # bin,img = color_threshold("./colour_map_images/02-12-2021_21-09-06/02-12-2021_21-09-06_10.jpg", chicken)
-
-    # find_bounding_box(bin.astype(np.uint8),img)
-    # p = read_box_from_txt("./pred_bounding_boxes/02-12-2021_21-09-06/02-12-2021_21-09-06_39.txt")
-    # gt = read_box_from_txt("./bounding_boxes/02-12-2021_21-09-06/02-12-2021_21-09-06_39.txt")
-    #
-    # a = center_to_ul_br(p,860,480)
-    # b = center_to_ul_br(gt,860,480)
-    # print(intersection_over_union(a[0],b[0]))
-
-    # create_bounding_box_images("02-12-2021_21-09-06","CENTER")
-    # merge_images("./bounding_box_images/02-12-2021_21-09-06_OLD/","chickentestvideo_ BASELINE",10)
-
-    # cv2.imwrite("binary.jpg", binary_image("./colour_map_images/02-12-2021_21-09-06/02-12-2021_21-09-06_10.jpg"))
