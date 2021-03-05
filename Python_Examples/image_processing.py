@@ -9,10 +9,10 @@ dirt = np.array([69, 45, 139])
 cow = np.array([105, 7, 1])
 
 MOB = {"chicken": 0, "cow":1}
+# COLOR = {"chicken": np.array([36, 195, 175]), "cow": np.array([105, 7, 1])}
 COLOR = {"chicken": np.array([36, 195, 175]), "cow": np.array([105, 7, 1])}
 
 
-# 256 x 256
 def parse_video(video_path, timestamp):
 
     WANTED_FRAME_PER_SECOND = 2
@@ -104,7 +104,7 @@ def find_bounding_box(bin_img, color_image, format_string):
             x,y,w,h = min[0]-buf, min[1]-buf, max[0]-min[0]+2*buf, max[1]-min[1]+2*buf
 
             if format_string == "CENTER":
-                boxes.append([x+(w/2),y+(h/2),w,h])
+                boxes.append([(x+(w/2))/430,(y+(h/2))/240,w/430,h/240])
             elif format_string == "VOC":
                 boxes.append([x,y,x+w,y+h])
             elif format_string == "COCO":
@@ -117,12 +117,12 @@ def find_bounding_box(bin_img, color_image, format_string):
     return boxes
 
 
-def scale_bounding_box(unscaled, img_w, img_h):
-    """ Rescaled bounding boxes to fit YOLO input format (center)"""
-    boxes = []
-    for box in unscaled:
-        boxes.append([box[0]/img_w, box[1]/img_h, box[2]/img_w, box[3]/img_h])
-    return boxes
+# def scale_bounding_box(unscaled, img_w, img_h):
+#     """ Rescaled bounding boxes to fit YOLO input format (center)"""
+#     boxes = []
+#     for box in unscaled:
+#         boxes.append([box[0]/img_w, box[1]/img_h, box[2]/img_w, box[3]/img_h])
+#     return boxes
 
 
 def write_box_to_txt(classification, boxes, textfile_name, reset):
@@ -153,8 +153,7 @@ def find_all_bounding_boxes(timestamp, mobs, format_string):
             for mob in mobs:
                 img = cv2.imread(image_dir_path + "/" + image)
                 bin_img = color_threshold_binary(img, COLOR[mob])
-                unscaled = find_bounding_box(bin_img, img, format_string)
-                box = scale_bounding_box(unscaled, 430, 240)
+                box = find_bounding_box(bin_img, img, format_string)
                 write_box_to_txt(MOB[mob], box, text_dir + f"/{image[:-4]}.txt", reset_files)
                 reset_files = False
 
