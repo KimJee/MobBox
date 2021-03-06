@@ -8,8 +8,9 @@ cloud = np.array([224, 195, 181])
 dirt = np.array([69, 45, 139])
 cow = np.array([105, 7, 1])
 
-MOB = {"chicken": 0, "cow":1}
-COLOR = {"chicken": np.array([36, 195, 175]), "cow": np.array([105, 7, 1])}
+MOB = {"chicken": 0, "cow": 1, "pig": 2, "villager": 3}
+COLOR = {"chicken": np.array([36, 195, 175]), "cow": np.array([105, 7, 1]),
+         "pig": np.array([]), "villager": np.array([186, 84, 126])}
 
 
 def parse_video(video_path, timestamp):
