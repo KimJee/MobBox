@@ -1,48 +1,0 @@
-ffmpeg version 4.3.1-2021-01-26-full_build-www.gyan.dev Copyright (c) 2000-2021 the FFmpeg developers
-  built with gcc 10.2.0 (Rev6, Built by MSYS2 project)
-  configuration: --enable-gpl --enable-version3 --enable-static --disable-w32threads --disable-autodetect --enable-fontconfig --enable-iconv --enable-gnutls --enable-libxml2 --enable-gmp --enable-lzma --enable-libsnappy --enable-zlib --enable-libsrt --enable-libssh --enable-libzmq --enable-avisynth --enable-libbluray --enable-libcaca --enable-sdl2 --enable-libdav1d --enable-libzvbi --enable-librav1e --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxvid --enable-libaom --enable-libopenjpeg --enable-libvpx --enable-libass --enable-frei0r --enable-libfreetype --enable-libfribidi --enable-libvidstab --enable-libvmaf --enable-libzimg --enable-amf --enable-cuda-llvm --enable-cuvid --enable-ffnvcodec --enable-nvdec --enable-nvenc --enable-d3d11va --enable-dxva2 --enable-libmfx --enable-libcdio --enable-libgme --enable-libmodplug --enable-libopenmpt --enable-libopencore-amrwb --enable-libmp3lame --enable-libshine --enable-libtheora --enable-libtwolame --enable-libvo-amrwbenc --enable-libilbc --enable-libgsm --enable-libopencore-amrnb --enable-libopus --enable-libspeex --enable-libvorbis --enable-ladspa --enable-libbs2b --enable-libflite --enable-libmysofa --enable-librubberband --enable-libsoxr --enable-chromaprint
-  libavutil      56. 51.100 / 56. 51.100
-  libavcodec     58. 91.100 / 58. 91.100
-  libavformat    58. 45.100 / 58. 45.100
-  libavdevice    58. 10.100 / 58. 10.100
-  libavfilter     7. 85.100 /  7. 85.100
-  libswscale      5.  7.100 /  5.  7.100
-  libswresample   3.  7.100 /  3.  7.100
-  libpostproc    55.  7.100 / 55.  7.100
-Input #0, image2pipe, from 'pipe:':
-  Duration: N/A, bitrate: N/A
-    Stream #0:0: Video: ppm, rgb24, 640x480, 1 fps, 1 tbr, 1 tbn, 1 tbc
-Stream mapping:
-  Stream #0:0 -> #0:0 (ppm (native) -> h264 (libx264))
-[libx264 @ 000001f9cc4db640] using cpu capabilities: MMX2 SSE2Fast SSSE3 SSE4.2 AVX FMA3 BMI2 AVX2
-[libx264 @ 000001f9cc4db640] profile High, level 2.2, 4:2:0, 8-bit
-[libx264 @ 000001f9cc4db640] 264 - core 161 r3040 35417dc - H.264/MPEG-4 AVC codec - Copyleft 2003-2021 - http://www.videolan.org/x264.html - options: cabac=1 ref=3 deblock=1:0:0 analyse=0x3:0x113 me=hex subme=7 psy=1 psy_rd=1.00:0.00 mixed_ref=1 me_range=16 chroma_me=1 trellis=1 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=-2 threads=6 lookahead_threads=1 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=3 b_pyramid=2 b_adapt=1 b_bias=0 direct=1 weightb=1 open_gop=0 weightp=2 keyint=250 keyint_min=1 scenecut=40 intra_refresh=0 rc_lookahead=40 rc=abr mbtree=1 bitrate=400 ratetol=1.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00
-Output #0, mp4, to '.\mission_records\fbc1d4f6-478c-46a6-b118-1f4235773aeb\video.mp4':
-  Metadata:
-    encoder         : Lavf58.45.100
-    Stream #0:0: Video: h264 (libx264) (avc1 / 0x31637661), yuv420p, 640x480, q=-1--1, 400 kb/s, 1 fps, 16384 tbn, 1 tbc
-    Metadata:
-      encoder         : Lavc58.91.100 libx264
-    Side data:
-      cpb: bitrate max/min/avg: 0/0/400000 buffer size: 0 vbv_delay: N/A
-frame=    8 fps=7.9 q=0.0 size=       0kB time=00:00:00.00 bitrate=N/A speed=   0x    frame=    9 fps=4.4 q=0.0 size=       0kB time=00:00:00.00 bitrate=N/A speed=   0x    frame=   10 fps=3.3 q=0.0 size=       0kB time=00:00:00.00 bitrate=N/A speed=   0x    frame=   11 fps=2.7 q=0.0 size=       0kB time=00:00:00.00 bitrate=N/A speed=   0x    frame=   12 fps=2.4 q=0.0 size=       0kB time=00:00:00.00 bitrate=N/A speed=   0x    frame=   13 fps=2.1 q=0.0 size=       0kB time=00:00:00.00 bitrate=N/A speed=   0x    frame=   14 fps=2.0 q=0.0 size=       0kB time=00:00:00.00 bitrate=N/A speed=   0x    frame=   15 fps=1.9 q=0.0 size=       0kB time=00:00:00.00 bitrate=N/A speed=   0x    frame=   15 fps=1.7 q=0.0 size=       0kB time=00:00:00.00 bitrate=N/A speed=   0x    frame=   15 fps=1.6 q=-1.0 Lsize=     219kB time=00:00:12.00 bitrate= 149.7kbits/s speed=1.29x    
-video:218kB audio:0kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: 0.449888%
-[libx264 @ 000001f9cc4db640] frame I:2     Avg QP: 0.46  size: 95829
-[libx264 @ 000001f9cc4db640] frame P:4     Avg QP: 0.06  size:  6360
-[libx264 @ 000001f9cc4db640] frame B:9     Avg QP: 0.55  size:   645
-[libx264 @ 000001f9cc4db640] consecutive B-frames: 20.0%  0.0%  0.0% 80.0%
-[libx264 @ 000001f9cc4db640] mb I  I16..4: 25.4% 16.1% 58.5%
-[libx264 @ 000001f9cc4db640] mb P  I16..4:  6.8%  5.2%  2.7%  P16..4:  3.4%  1.2%  1.1%  0.0%  0.0%    skip:79.6%
-[libx264 @ 000001f9cc4db640] mb B  I16..4:  1.2%  0.1%  0.0%  B16..8:  4.2%  1.0%  0.1%  direct: 0.2%  skip:93.2%  L0:18.1% L1:80.1% BI: 1.8%
-[libx264 @ 000001f9cc4db640] final ratefactor: -2.02
-[libx264 @ 000001f9cc4db640] 8x8 transform intra:19.8% inter:39.6%
-[libx264 @ 000001f9cc4db640] coded y,uvDC,uvAC intra: 69.4% 75.7% 75.6% inter: 2.2% 3.9% 3.7%
-[libx264 @ 000001f9cc4db640] i16 v,h,dc,p: 63% 14% 14%  9%
-[libx264 @ 000001f9cc4db640] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu:  1% 79%  8%  1%  1%  0%  6%  0%  3%
-[libx264 @ 000001f9cc4db640] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 11% 53% 11%  3%  4%  3%  6%  2%  6%
-[libx264 @ 000001f9cc4db640] i8c dc,h,v,p: 54% 35%  4%  7%
-[libx264 @ 000001f9cc4db640] Weighted P-Frames: Y:0.0% UV:0.0%
-[libx264 @ 000001f9cc4db640] ref P L0: 90.7%  2.3%  7.1%
-[libx264 @ 000001f9cc4db640] ref B L0: 69.6% 30.4%
-[libx264 @ 000001f9cc4db640] ref B L1: 90.7%  9.3%
-[libx264 @ 000001f9cc4db640] kb/s:118.88

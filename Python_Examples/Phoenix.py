@@ -164,13 +164,15 @@ def do_mission(agent_host, my_mission, my_mission_record):
     # Mission has ended.
 
 
+VIDEO_FRAME_RATE = 60
+MISSION_TIME_LIMIT = 20
 def run():
-    agent_host = MalmoPython.AgentHost()                  # Create our agent_host
-    my_xml = get_xml()                                    # Grabs the xml "environment-settings"
-    my_mission = MalmoPython.MissionSpec(my_xml, True)    # Describes the mission specifications
-    my_mission.timeLimitInSeconds(22)                     # Describes the time limit for the mission
-    my_mission_record = recordDualStream(10)                # Records both regular video & color-map onto /video/ directory
-    do_mission(agent_host, my_mission, my_mission_record) # Starts and runs mission loop
+    agent_host = MalmoPython.AgentHost()                                  # Create our agent_host
+    my_xml = get_xml()                                                    # Grabs the xml "environment-settings"
+    my_mission = MalmoPython.MissionSpec(my_xml, True)                    # Describes the mission specifications
+    my_mission.timeLimitInSeconds(MISSION_TIME_LIMIT)                     # Describes the time limit for the mission
+    my_mission_record = recordDualStream(VIDEO_FRAME_RATE)                # Records both regular video & color-map onto /video/ directory
+    do_mission(agent_host, my_mission, my_mission_record)                 # Starts and runs mission loop
     
     print("Now creating image files in directory video_images & colormap_images")
     image_dir = ip.parse_video(VIDEO_FILE_PATH, TIMESTAMP)
