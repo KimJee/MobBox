@@ -9,7 +9,6 @@ dirt = np.array([69, 45, 139])
 cow = np.array([105, 7, 1])
 
 MOB = {"chicken": 0, "cow":1}
-# COLOR = {"chicken": np.array([36, 195, 175]), "cow": np.array([105, 7, 1])}
 COLOR = {"chicken": np.array([36, 195, 175]), "cow": np.array([105, 7, 1])}
 
 
@@ -88,7 +87,7 @@ def color_threshold_binary(image, color):
     return mask
 
 
-def find_bounding_box(bin_img, color_image, format_string):
+def find_bounding_box(bin_img, color_image, mob, format_string):
     contours, hierarchy = cv2.findContours(bin_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     boxes = []
@@ -105,13 +104,13 @@ def find_bounding_box(bin_img, color_image, format_string):
             w,h = min(429,max_pos[0]+buf)-x, min(239,max_pos[1]+buf)-y
 
             if format_string == "CENTER":
-                boxes.append([(x+(w/2))/430,(y+(h/2))/240,w/430,h/240])
+                boxes.append([MOB[mob],(x+(w/2))/430,(y+(h/2))/240,w/430,h/240])
             elif format_string == "VOC":
-                boxes.append([x,y,x+w,y+h])
+                boxes.append([mob,x,y,x+w,y+h])
             elif format_string == "COCO":
                 boxes.append([x,y,w,h])
 
-            # cv2.rectangle(color_image, (0, 0), (x + w, y + h), (0, 255, 0), 2)
+            # cv2.rectangle(color_image, (x, y), (x + w, y + h), (0, 255, 0), 2)
             # cv2.imshow("Bounding box", color_image)
             # cv2.waitKey(0)
 
@@ -126,12 +125,12 @@ def find_bounding_box(bin_img, color_image, format_string):
 #     return boxes
 
 
-def write_box_to_txt(classification, boxes, textfile_name, reset):
+def write_box_to_txt(boxes, textfile_name, reset):
     if reset:
         open(textfile_name, 'w').close()
     file = open(textfile_name, "a")
     for box in boxes:
-        file.write(f"{classification} {box[0]} {box[1]} {box[2]} {box[3]}\n")
+        file.write(f"{box[0]} {box[1]} {box[2]} {box[3]} {box[4]}\n")
     file.close()
 
 
@@ -150,13 +149,13 @@ def find_all_bounding_boxes(timestamp, mobs, format_string):
         pass
 
     for image in os.listdir(image_dir_path):
-        if image.endswith(".jpg"):    # add files that are not images
+        if image.endswith(".jpg"):
             reset_files = True
             for mob in mobs:
                 img = cv2.imread(image_dir_path + "/" + image)
                 bin_img = color_threshold_binary(img, COLOR[mob])
-                box = find_bounding_box(bin_img, img, format_string)
-                write_box_to_txt(MOB[mob], box, text_dir + f"/{image[:-4]}.txt", reset_files)
+                box = find_bounding_box(bin_img, img, mob, format_string)
+                write_box_to_txt(box, text_dir + f"/{image[:-4]}.txt", reset_files)
                 reset_files = False
 
 # ../sdasd/23819203321.jpg
