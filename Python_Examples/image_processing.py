@@ -60,6 +60,8 @@ def merge_images(image_dir,video_name,fps):
     for filename in sorted_dir:
         if filename.endswith(".jpg"):
             img = cv2.imread(image_dir+filename)
+            cv2.imshow("test",img)
+            cv2.waitKey(0)
             height, width, layers = img.shape
             size = (width, height)
             img_array.append(img)
@@ -79,8 +81,8 @@ Functions to generate ground truth bounding boxes from images
 def color_threshold_binary(image, color):
     # cv2.imshow('normal', image)
     # cv2.waitKey(0)
-    lower_threshold = color - 50
-    upper_threshold = color + 50
+    lower_threshold = color - 25
+    upper_threshold = color + 25
     mask = cv2.inRange(image, lower_threshold, upper_threshold)
     # cv2.imshow("mask", mask)
     # cv2.waitKey(0)
@@ -93,7 +95,8 @@ def find_bounding_box(bin_img, color_image, mob, format_string):
     boxes = []
     for contour in contours:
         _,_,w,h = cv2.boundingRect(contour)
-        if w * h >= 25:
+        if w * h >= 300:
+            print(w*h)
             max_pos = np.amax(contour,axis=0)[0]
             min_pos = np.amin(contour,axis=0)[0]
 
@@ -148,7 +151,9 @@ def find_all_bounding_boxes(timestamp, mobs, format_string):
     except OSError as exception:
         pass
 
-    for image in os.listdir(image_dir_path):
+    sorted_dir = sorted(os.listdir(image_dir_path))
+    sorted_dir.sort(key=lambda img: len(img))
+    for image in sorted_dir:
         if image.endswith(".jpg"):
             reset_files = True
             for mob in mobs:
@@ -226,8 +231,8 @@ def draw_bounding_box(image_name, image_path, pred, label, timestamp):
     for i in range(len(label)):
         box = label[i]
         cv2.rectangle(img, (box[0], box[1]), (box[2], box[3]), (0, 0, 255), 2)
-        box = pred[i]
-        cv2.rectangle(img, (box[0], box[1]), (box[2], box[3]), (0, 255, 0), 2)
+        # box = pred[i]
+        # cv2.rectangle(img, (box[0], box[1]), (box[2], box[3]), (0, 255, 0), 2)
 
     # cv2.imshow("Bounding box", img)
     # cv2.waitKey(0)
@@ -244,8 +249,9 @@ def create_bounding_box_images(timestamp, format_string):
 
     format_string: COCO, VOC, or CENTER
     """
-    pred = read_all_box_from_txt(f"./pred_bounding_boxes/{timestamp}/", format_string)
+    # pred = read_all_box_from_txt(f"./pred_bounding_boxes/{timestamp}/", format_string)
     label = read_all_box_from_txt(f"./bounding_boxes/{timestamp}/", format_string)
+    pred = label
 
     image_dir = sorted(os.listdir(f"./video_images/{timestamp}/"))
     image_dir.sort(key=lambda img: len(img))
@@ -283,5 +289,7 @@ def intersection_over_union(boxA, boxB):
 
 
 if __name__ == "__main__":
-    find_all_bounding_boxes("03-04-2021_17-22-05", ["cow","chicken"], "CENTER")
-    create_bounding_box_images("03-04-2021_17-22-05", "CENTER")
+    pass
+    # find_all_bounding_boxes("03-05-2021_19-32-24", ["cow","chicken"], "CENTER")
+    # create_bounding_box_images("03-05-2021_19-32-24", "CENTER")
+    # merge_images("./bounding_box_images/03-05-2021_19-32-24/", "bounding_box_size_test", 5)
