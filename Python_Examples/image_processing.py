@@ -97,7 +97,7 @@ def find_bounding_box(bin_img, color_image, mob, format_string):
     for contour in contours:
         _,_,w,h = cv2.boundingRect(contour)
         if w * h >= 300:
-            print(w*h)
+            #print(w*h)
             max_pos = np.amax(contour,axis=0)[0]
             min_pos = np.amin(contour,axis=0)[0]
 

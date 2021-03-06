@@ -63,7 +63,7 @@ def spawn_mob(spawn_type):
     return entities
 
 def spawn_entity_in_front(spawn_type, x, z):
-    return f"<DrawEntity x='{x}' y='2' z='{z}' type='{spawn_type}'/>"
+    return f"<DrawEntity x='{x}' y='64' z='{z}' type='{spawn_type}'/>"
 
 def get_xml():
     return '''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
@@ -84,10 +84,10 @@ def get_xml():
                         <Weather>clear</Weather>
                     </ServerInitialConditions>
                     <ServerHandlers>
-                        <FlatWorldGenerator generatorString="3;7,59*1,3*3,2;1;stronghold,biome_1,village,decoration,dungeon,lake,mineshaft,lava_lake"/>
+                        <FlatWorldGenerator generatorString="3;7,59*1,3*3,2;1;"/>
                         <DrawingDecorator>''' + \
-                        spawn_entity_in_front("Cow", 5, 3) + \
-                        spawn_entity_in_front(MOB_TYPE, 0 , 3) + \
+                        spawn_entity_in_front(MOB_TYPE, 5 , 3) + \
+                        spawn_entity_in_front("Villager", 0, 3) + \
                         '''</DrawingDecorator>
                         <ServerQuitWhenAnyAgentFinishes/>
                     </ServerHandlers>
@@ -175,7 +175,7 @@ def run():
     print("Now creating image files in directory video_images & colormap_images")
     image_dir = ip.parse_video(VIDEO_FILE_PATH, TIMESTAMP)
     print("Finding the bounding boxes for each, and writing to bounding_boxes")
-    ip.find_all_bounding_boxes(TIMESTAMP, ["chicken", "cow"], "VOC")
+    ip.find_all_bounding_boxes(TIMESTAMP, ["villager"], "CENTER")
 
 if __name__ == "__main__":
     run()
