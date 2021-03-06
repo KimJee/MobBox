@@ -168,13 +168,9 @@ def find_all_bounding_boxes(timestamp, mobs, format_string):
 def getCoordinatesFromImage(image_path: "Path to the image", mobs: "Array of mobs"):
     box = []
     for mob in mobs:
-        coordinate_row = []
-        coordinate_row.append(mob)   # [mob]
         img = cv2.imread(image_path)
         bin_img = color_threshold_binary(img, COLOR[mob])
-        coordinate_row.append(find_bounding_box(bin_img, img, "VOC")) # Returns 2D array of all coordinates
-        box.append(coordinate_row)
-        
+        box.append(find_bounding_box(bin_img, img, mob, "VOC")) # Returns 2D array of all coordinates
     return box
 
 

@@ -16,6 +16,7 @@ from pprint import pprint
 # For easy xml creation
 import lxml
 from lxml import etree as et
+from image_processing import getCoordinatesFromImage
 
 """
     Returns BGR Order
@@ -157,7 +158,7 @@ def create_dir(dir_name: str) -> None:
     Generates the components of the XML
 """
 # User must put in the images by hand into the images directory
-def mad_libs_xml(foldername: str, filename: str, full_path: str, object_name: str, IMAGE_WIDTH: int, IMAGE_HEIGHT: int, IMAGE_DEPTH: int, x_min: int, y_min: int, x_max: int, y_max: int):
+def mad_libs_xml(foldername: str, filename: str, full_path: str, IMAGE_WIDTH: int, IMAGE_HEIGHT: int, IMAGE_DEPTH: int, label_list: "Array of coordinate labels"):
     #root = et.Element('xml', version='1.0') # Generates top-level xml tag
     annotation_tag = et.Element('annotation')
     #annotation_tag = et.SubElement(root, 'annotation')
@@ -192,34 +193,54 @@ def mad_libs_xml(foldername: str, filename: str, full_path: str, object_name: st
     segmented_tag = et.SubElement(annotation_tag, 'segmented')
     segmented_tag.text = "0"
 
-    object_tag = et.SubElement(annotation_tag, 'object')
-
-    name_tag = et.SubElement(object_tag, 'name')
-    name_tag.text = object_name
-
-    pose_tag = et.SubElement(object_tag, 'pose')
-    pose_tag.text = "Unspecified"
-
-    truncated_tag = et.SubElement(object_tag, 'truncated')
-    truncated_tag.text = "0"
-
-    difficult_tag = et.SubElement(object_tag, 'difficult')
-    difficult_tag.text = "0"
-
-    bndbox_tag = et.SubElement(object_tag, 'bndbox')
-
-    xmin_tag = et.SubElement(bndbox_tag, 'xmin')
-    xmin_tag.text = str(x_min)
-    ymin_tag = et.SubElement(bndbox_tag, 'ymin')
-    ymin_tag.text = str(y_min)
-    xmax_tag = et.SubElement(bndbox_tag, 'xmax')
-    xmax_tag.text = str(x_max)
-    ymax_tag = et.SubElement(bndbox_tag, 'ymax')
-    ymax_tag.text = str(y_max)
+    add_objects_to_XML(label_list, annotation_tag)
+    # object_tag = et.SubElement(annotation_tag, 'object')
+    # name_tag = et.SubElement(object_tag, 'name')
+    # name_tag.text = object_name
+    # pose_tag = et.SubElement(object_tag, 'pose')
+    # pose_tag.text = "Unspecified"
+    # truncated_tag = et.SubElement(object_tag, 'truncated')
+    # truncated_tag.text = "0"
+    # difficult_tag = et.SubElement(object_tag, 'difficult')
+    # difficult_tag.text = "0"
+    # bndbox_tag = et.SubElement(object_tag, 'bndbox')
+    # xmin_tag = et.SubElement(bndbox_tag, 'xmin')
+    # xmin_tag.text = str(x_min)
+    # ymin_tag = et.SubElement(bndbox_tag, 'ymin')
+    # ymin_tag.text = str(y_min)
+    # xmax_tag = et.SubElement(bndbox_tag, 'xmax')
+    # xmax_tag.text = str(x_max)
+    # ymax_tag = et.SubElement(bndbox_tag, 'ymax')
+    # ymax_tag.text = str(y_max)
     
     return annotation_tag
     #print(et.tostring(root, pretty_print=True).decode("utf-8")) 
 
+def add_objects_to_XML(label_list: "List of coordinate labels", XML_ROOT: "Endpoint to attach label"):
+    for label in label_list:
+        object_tag = et.SubElement(XML_ROOT, 'object')
+        
+        object_name, x_min, y_min, x_max, y_max = label
+
+        name_tag = et.SubElement(object_tag, 'name')
+        name_tag.text = object_name
+        pose_tag = et.SubElement(object_tag, 'pose')
+        pose_tag.text = "Unspecified"
+        truncated_tag = et.SubElement(object_tag, 'truncated')
+        truncated_tag.text = "0"
+        difficult_tag = et.SubElement(object_tag, 'difficult')
+        difficult_tag.text = "0"
+        bndbox_tag = et.SubElement(object_tag, 'bndbox')
+        xmin_tag = et.SubElement(bndbox_tag, 'xmin')
+        xmin_tag.text = str(x_min)
+        ymin_tag = et.SubElement(bndbox_tag, 'ymin')
+        ymin_tag.text = str(y_min)
+        xmax_tag = et.SubElement(bndbox_tag, 'xmax')
+        xmax_tag.text = str(x_max)
+        ymax_tag = et.SubElement(bndbox_tag, 'ymax')
+        ymax_tag.text = str(y_max)
+
+    pass
 
 def getImageData(_filename: "Last Ending Path to the exact image"):
     #print("getImageData(): " + os.getcwd() + "/" + _filename)
@@ -233,10 +254,19 @@ def getImageData(_filename: "Last Ending Path to the exact image"):
 def getCoordinates(_filename: str):
     os.chdir("../input_color_map_images") # Get out of images directory
     #print(os.getcwd())
-    COLOR_TRIPLET = np.array([36, 195, 175])
-    bin_img = binary_image(_filename, COLOR_TRIPLET) # Grabs the binary masked value of the image
+    #COLOR_TRIPLET = np.array([36, 195, 175])
+    #bin_img = binary_image(_filename, COLOR_TRIPLET) # Grabs the binary masked value of the image
     #print(bin_img)
-    return find_bounding_box_coord(bin_img, "VOC")
+    mobs = ["chicken"]
+    #print("++++++++++++++++++++++++++++++")
+    result = getCoordinatesFromImage(_filename, mobs)
+    if (len(result) == 0):
+        print("Did not detect item in the image")
+        raise Exception("Malmo Color Map did not find a mob")
+    #print(result[0])
+    #print("-------------------------------")
+    return result[0]
+    
 """
     @param
         "CENTER": [x_center, y_center, width/2, height/2]
@@ -336,17 +366,17 @@ def ImageAI_setup():
         xml_path = parent + xml_ext
 
         #print(xml_path)
-        if (os.path.exists(xml_path)):
-            continue
+        #if (os.path.exists(xml_path)):
+        #    continue
         
 
         # Data for the mad-libs
         _full_path = dirpath + "/" + _filename
         _IMAGE_WIDTH, _IMAGE_HEIGHT, COLOR = getImageData(_filename)    
-        _x_min, _y_min, _x_max, _y_max, = getCoordinates(_filename) # Natalia's function
+        _label_list = getCoordinates(_filename) # Natalia's function
         
         # Constructs the Annotation in XML
-        XML_ROOT = mad_libs_xml(foldername="images", filename=_filename, full_path=_full_path, object_name="chicken", IMAGE_WIDTH=_IMAGE_WIDTH, IMAGE_HEIGHT=_IMAGE_HEIGHT, IMAGE_DEPTH=COLOR, x_min=_x_min, y_min=_y_min, x_max=_x_max, y_max=_y_max)    
+        XML_ROOT = mad_libs_xml(foldername="images", filename=_filename, full_path=_full_path, IMAGE_WIDTH=_IMAGE_WIDTH, IMAGE_HEIGHT=_IMAGE_HEIGHT, IMAGE_DEPTH=COLOR, label_list=_label_list)    
 
         # Writes to the annotation file path
         write_xml_to_file(_filename, XML_ROOT)
@@ -386,15 +416,15 @@ def run():
 
     os.chdir("../")
 
-    detector = CustomObjectDetection()
-    detector.setModelTypeAsYOLOv3()
-    detector.setModelPath("./models/holo-lens-model-deriv/detection_model-ex-025--loss-0000.407.h5")
-    detector.setJsonPath("./json/detection_config.json")
-    detector.loadModel()
-    detections = detector.detectObjectsFromImage(input_image="./images/02-11-2021_22-27-51_352.jpg", output_image_path="./output.jpg")
-    
-    for detection in detections:
-        print(detection["name"], " : ", detection["percentage_probability"], " : ", detection["box_points"])
+    # detector = CustomObjectDetection()
+    # detector.setModelTypeAsYOLOv3()
+    # detector.setModelPath("./models/holo-lens-model-deriv/detection_model-ex-025--loss-0000.407.h5")
+    # detector.setJsonPath("./json/detection_config.json")
+    # detector.loadModel()
+    # detections = detector.detectObjectsFromImage(input_image="./images/02-11-2021_22-27-51_352.jpg", output_image_path="./output.jpg")
+    # 
+    # for detection in detections:
+    #     print(detection["name"], " : ", detection["percentage_probability"], " : ", detection["box_points"])
     # trainer = DetectionModelTrainer()
     # trainer.setModelTypeAsYOLOv3()
     # trainer.setDataDirectory(data_directory="")
