@@ -96,10 +96,7 @@ def get_xml():
                 <AgentSection mode="Survival">
                     <Name>CS175Test</Name>
                     <AgentStart>
-                        <Placement x="0" y="2" z="0" pitch="0" yaw="0"/>
-                        <Inventory>
-                        <InventoryItem slot="0" type="diamond_pickaxe"/>
-                        </Inventory>
+                        <Placement x="0" y="64" z="0" pitch="0" yaw="0"/>
                     </AgentStart>
                     <AgentHandlers>
                               <VideoProducer>
@@ -171,11 +168,14 @@ def run():
     agent_host = MalmoPython.AgentHost()                  # Create our agent_host
     my_xml = get_xml()                                    # Grabs the xml "environment-settings"
     my_mission = MalmoPython.MissionSpec(my_xml, True)    # Describes the mission specifications
-    #my_mission.timeLimitInSeconds(22)                     # Describes the time limit for the mission
+    my_mission.timeLimitInSeconds(22)                     # Describes the time limit for the mission
     my_mission_record = recordDualStream(10)                # Records both regular video & color-map onto /video/ directory
     do_mission(agent_host, my_mission, my_mission_record) # Starts and runs mission loop
-    #image_dir = ip.parse_video(VIDEO_FILE_PATH, TIMESTAMP)
-    #ip.find_all_bounding_boxes(image_dir, TIMESTAMP)
+    
+    print("Now creating image files in directory video_images & colormap_images")
+    image_dir = ip.parse_video(VIDEO_FILE_PATH, TIMESTAMP)
+    print("Finding the bounding boxes for each, and writing to bounding_boxes")
+    ip.find_all_bounding_boxes(TIMESTAMP, ["chicken", "cow"], "VOC")
 
 if __name__ == "__main__":
     run()

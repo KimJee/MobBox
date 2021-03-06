@@ -135,6 +135,7 @@ def write_box_to_txt(classification, boxes, textfile_name, reset):
     file.close()
 
 
+
 def find_all_bounding_boxes(timestamp, mobs, format_string):
     """
     timestamp: string of timestamp
@@ -157,6 +158,14 @@ def find_all_bounding_boxes(timestamp, mobs, format_string):
                 box = find_bounding_box(bin_img, img, format_string)
                 write_box_to_txt(MOB[mob], box, text_dir + f"/{image[:-4]}.txt", reset_files)
                 reset_files = False
+
+# ../sdasd/23819203321.jpg
+#
+def getCoordinatesFromImage(image_path: "Path to the image", mobs: "Array of mobs"):
+    for mob in mobs:
+        img = cv2.imread(image_path)
+        bin_img = color_threshold_binary(img, COLOR[mob])
+        box = find_bounding_box(bin_img, img, "VOC")
 
 
 """
