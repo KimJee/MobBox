@@ -84,10 +84,9 @@ def get_xml():
                         <Weather>clear</Weather>
                     </ServerInitialConditions>
                     <ServerHandlers>
-                        <FlatWorldGenerator generatorString="3;7,59*1,3*3,2;1;"/>
+                        <FlatWorldGenerator generatorString="3;7,59*1,3*12,12;2;decoration"/>
                         <DrawingDecorator>''' + \
-                        spawn_entity_in_front(MOB_TYPE, 5 , 3) + \
-                        spawn_entity_in_front("Villager", 0, 3) + \
+                        spawn_entity_in_front("Sheep", 5 , 3) + \
                         spawn_entity_in_front("Villager", 0, 5) + \
                         '''</DrawingDecorator>
                         <ServerQuitWhenAnyAgentFinishes/>
