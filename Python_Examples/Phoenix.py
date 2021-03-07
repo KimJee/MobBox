@@ -88,6 +88,7 @@ def get_xml():
                         <DrawingDecorator>''' + \
                         spawn_entity_in_front(MOB_TYPE, 5 , 3) + \
                         spawn_entity_in_front("Villager", 0, 3) + \
+                        spawn_entity_in_front("Villager", 0, 5) + \
                         '''</DrawingDecorator>
                         <ServerQuitWhenAnyAgentFinishes/>
                     </ServerHandlers>
@@ -165,7 +166,7 @@ def do_mission(agent_host, my_mission, my_mission_record):
 
 
 VIDEO_FRAME_RATE = 60
-MISSION_TIME_LIMIT = 20
+MISSION_TIME_LIMIT = 30
 def run():
     agent_host = MalmoPython.AgentHost()                                  # Create our agent_host
     my_xml = get_xml()                                                    # Grabs the xml "environment-settings"
