@@ -74,8 +74,8 @@ One of the next steps in building our model was providing the ability to extend 
 
 ![Alt Text](img/raw/03-18-2021_12-34-34_7.jpg)
 ![Alt Text](img/color/03-18-2021_12-34-34_7.jpg)
-[Left: Cute Chicken in the Desert]
-[Right: Terrible color-choices]
+
+[Left: Cute Chicken in the Desert] [Right: Terrible color-choices]
 
 ### Color Fixing
 
@@ -84,30 +84,26 @@ First, trouble with colors. By using Malmo’s color mapping utility -- a utilit
 On top of that, the compression created from the image file format creates noisy images that cause problems for our automated-color-map-labeler. Thus, we had to use an n-color filter to threshold color values to minimize the error in our ground-truth labeling.
 
 ![A color-map view of the jungle biome](img/color-cv-swamp.jpg)
-
-*A color-map view of the jungle biome*
-
 ![Picture of the jungle biome](img/raw-cv-swamp.jpg)
 
-*Picture of the jungle biome*
+[Left: *A color-map view of the jungle biome*] [Right: *Picture of the jungle biome* ]
 
 ### Biome Distractors
 
 Also because of the differences in the biomes, there was much more distractors from the mobs themselves. For instance, in the picture on the bottom left, we see that the environment is filled with trees, with “wood” in a reddish-purple, “leaf-block” the neon-green, and “vine-block” the darker-green. All of these distractors add complexity to our model, which then reduces our confidence in any given image.
 
 ![A rose or a pig?](img/jees-labels/detected-03-19-2021_17-12-22_29.jpg)
-
-*A rose or a pig?*
-
-This is well shown in this (above) image, the ImageAI model has a 98.234% confidence that the actual red rose is a pig. Instead of detecting the actual pig next to the grass. These distractors often fool our model.
-
 ![Alt Text](img/raw-all-snow.jpg)
 
-### Testing Our Model with Unseen Data
+[Left: *A rose or a pig?*] [Right: *No labels... really?*]
+
+This is well shown in this (left) image, the ImageAI model has a 98.234% confidence that the actual red rose is a pig. Instead of detecting the actual pig next to the grass. These distractors often fool our model.
+
+### Testing Ideology
 
 In our final model we had trained our model on these different categories of training data:
 Biomes: [Plains, None, Swamp, Desert, Forest]
-In combination with these mobs: [Cow, Cow-Duplicates, Villagers, Villager-Duplicates, Cow+ Villager, Chicken, Pig]
+In combination with these mobs: [Cow, Cow-Duplicates, Villagers, Villager-Duplicates, Cow+Villager, Chicken, Pig]
 
 In comparison, our testing set consists of...
 
