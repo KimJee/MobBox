@@ -119,14 +119,14 @@ In our training set, the model was tested on all combinations of cow-villager du
 
 ![Clones?](img/jees-labels/detected-03-19-2021_17-12-22_15.jpg)
 
-*AI correctly identifies two pigs*
+[*AI correctly identifies two pigs*]
 
 Another facet we wanted to explore was in terms of duplicate mobs. As seen above, we only trained on “singleton” pigs, yet we tested with “clones” of pigs. This would help us understand if our model could understand the duplicity of any given mob.
 
 ![A cow and a pig in the Ice Plains Biome](img/jees-labels/detected-03-19-2021_13-53-42_6.jpg)
 ![Chicken in the Birch Forest](img/jees-labels/detected-03-18-2021_13-30-59_24.jpg)
 
-[*A cow and a pig in the Ice Plains Biome*] [*Chicken in the Birch Forest* ]
+[Left: *A cow and a pig in the Ice Plains Biome*] [Right: *Chicken in the Birch Forest* ]
 
 ### Why we chose the biomes
 
@@ -135,12 +135,9 @@ Our training biomes consisted of biomes with little distractions (Plains, None),
 The next biome we used in testing was the Ice Plains biome. This biome consists mostly of snow, and while it is similar to the plain biomes above, it was still different enough due to the stark contrast of the main biome color, white. This would provide some difficulties for the model, especially for certain types of mobs. The chicken, for example, is mostly a white mob, which would be difficult to contrast against the white-textured snow. This would be a good test to see if our model can differentiate between the subject-- the chicken-- and the background--- the icy plains.
 
 ![Almost Perfect](img/jees-labels/detected-03-19-2021_19-28-20_11.jpg)
-
-*An almost perfect labelling*
-
 ![Chicken-Villager?](img/jees-labels/detected-03-19-2021_19-26-39_3.jpg)
 
-*A Chicken-Villager Appears*
+[Left: *An almost perfect labelling*] [Right: *A Chicken-Villager Appears*]
 
 ### Other Problems
 
@@ -163,6 +160,7 @@ Here is some sample data of the ImageAI model working on multiple mobs in the im
  'evaluation_samples': 245, 'map': 0.6967024435981448}]
 
 From this we can see that the easiest to detect in order was, chickens, cows, pigs, then villagers. I have reason to believe it’s because of the broad contrast in color of the chicken which makes it easier to detect incomparison to the others. But it seems like a villager is either hit or miss. Qualitatively speaking, my model was bad. Out of all of 110 images selected as a testing set, only about 30 of them had labels. And from the 30 that had labels, many were misclassified, double classified, or had the plethora of problems mentioned above.
+
 
 ## Resources Used
 
