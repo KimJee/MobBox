@@ -71,8 +71,6 @@ Below are values received from the ImageAI model after 10 epochs.
 'average_precision': {'chicken': 0.8836422909545835, 'cow': 0.6636756691843161, 'pig': 0.6809333179065912, 'villager': 0.5585584963470884},
  'evaluation_samples': 245, 'map': 0.6967024435981448}]
 
-
-
 To **qualitatively** assess our model, we are able to use OpenCV to draw our bounding boxes on top of the images. We can look at the visual accuracy of the bounding boxes as well as the consistency across many frames of a video (see our video summary).
 
 ## Resources Used
