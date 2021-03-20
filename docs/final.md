@@ -75,22 +75,22 @@ To **qualitatively** assess our model, we are able to use OpenCV to draw our bou
 ![Alt Text](img/raw-c-desert.jpg)
 ![Alt Text](img/raw-all-snow.jpg)
 ![Alt Text](img/color-cv-swamp.jpg)
-![Alt Text](img/raw-cv-forest.jpg)
+![Alt Text](img/raw-c-forest.jpg)
 
-*Challenges*
+### Challenges
 
 We have now tried to extend our model to different mobs, and with that came it’s own challenges. Our model can now detect 4 different types of mobs. These four minecraft mobs include, chickens , villagers, cows, and pigs. We choose these four mobs because of the variation in size, shape, and color from the background.
 
 Some of the challenges we faced while extending our model was that out confidence levels had dropped exponentially. In the previous model we had pretty high confidence because our chicken was a solitary, and was easy to look for with high contrast.
 
-*Biome Distractors*
+### Biome Distractors
 
 Also because of the differences in the biomes, there was much more distractors from the mobs themselves. For instance, in the picture on the bottom left, we see that the environment is filled with trees, with “wood” in a reddish-purple, “leaf-block” the neon-green, and “vine-block” the darker-green. All of these distractors add complexity to our model, which then reduces our confidence in any given image.
 
 ![Alt Text](img/raw-c-desert.jpg)
 ![Alt Text](img/color-c-desert.jpg)
 
-*Testing Our Model with Unseen Data*
+### Testing Our Model with Unseen Data
 
 So in our final model we had trained our model on these different categories of training data.
 
@@ -102,15 +102,15 @@ In comparison, out testing set included...
 Biomes {Ice Plains, Birch Forest}
 And these combinations… {Chicken,chicken+cow+pig, chicken+cow+villager, chicken+pig, cow, cow+pig, pig, pig+pig}
 
-*Color Fixing*
+### Color Fixing
 
 We also had some troubles with some of the differences in colors. By using Malmo’s color mapping, there are similar blocks/mob colors that are of a really same color. Thus, we had to use an n-color filter to threshold color values to minimize the error in our ground-truth labeling.
 
 Additionally, in some of our images you’ll see a “sheep” mob that is not detected by our algorithm. And the reason why that is, is because of the Malmo’s color-map utility will produce a bad color-mapping without a reference mob to take the “ground and shadows” color.
 
-*Other Problems*
+### Other Problems
 
-A common problem with our detection algorithm was that it draws multiple bounding boxes on one instance of a mob. But this is probably due to the automated-color-mapping pipeline we have in order to generate the ground truth without the painstaking label to hand-label a couple thousand of images. 
+A common problem with our detection algorithm was that it draws multiple bounding boxes on one instance of a mob. But this is probably due to the automated-color-mapping pipeline we have in order to generate the ground truth without the painstaking label to hand-label a couple thousand of images.
 
 ## Resources Used
 
