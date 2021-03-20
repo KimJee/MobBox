@@ -124,12 +124,9 @@ In our training set, the model was tested on all combinations of cow-villager du
 Another facet we wanted to explore was in terms of duplicate mobs. As seen above, we only trained on “singleton” pigs, yet we tested with “clones” of pigs. This would help us understand if our model could understand the duplicity of any given mob.
 
 ![A cow and a pig in the Ice Plains Biome](img/jees-labels/detected-03-19-2021_13-53-42_6.jpg)
-
-*A cow and a pig in the Ice Plains Biome*
-
 ![Chicken in the Birch Forest](img/jees-labels/detected-03-18-2021_13-30-59_24.jpg)
 
-*Chicken in the Birch Forest*
+[*A cow and a pig in the Ice Plains Biome*] [*Chicken in the Birch Forest* ]
 
 ### Why we chose the biomes
 
