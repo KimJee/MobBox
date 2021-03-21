@@ -40,14 +40,12 @@ Using the default weights as a starting point, we then trained our model, modify
 
 However, in extending the model to include these mobs and biomes, we came across some new challenges.
 
-
 ![Alt Text](img/raw/03-18-2021_12-34-34_7.jpg)
 ![Alt Text](img/color/03-18-2021_12-34-34_7.jpg)
 
 ### Color Fixing
 
 We first had some trouble with colors. By using Malmo’s color mapping utility -- a utility that transforms the minecraft video image, into a uniquely colored world that identifies each entity-- we have been able to generate a necessary, semi-automated system of labeling ground truth. However, the compression and image quality created from the colormap image files created noisy contours in OpenCV that caused problems for our automated-color-map-labeler. Thus, we had to use color value threshold to create smoother contours around each mob and minimize the error in our ground-truth labeling. This also helped in being able to detect multiple mobs within the same image.
-
 
 ## Evaluation
 ---
@@ -69,7 +67,7 @@ With these mob combinations: 1 Cow, 1 Pig, 1 Chicken, 1 Villager, 2 Pigs, 1 Pig 
 
 In our training set, the model was tested on all combinations of cow-villager duplicates, but no combinations with chickens or pigs. We left out this information in the training set because we wanted to explore the ability of our model to generalize information. Could the model generalize seeing chickens and pigs not only as singletons, but as objects that could be bundled together with other mobs?
 
-Another facet we wanted to explore was in terms of duplicate mobs. As seen above, we only trained on “singleton” pigs, yet we tested with “clones” of pigs. This would help us understand if our model could understand the duplicity of any given mob. 
+Another facet we wanted to explore was in terms of duplicate mobs. As seen above, we only trained on “singleton” pigs, yet we tested with “clones” of pigs. This would help us understand if our model could understand the duplicity of any given mob.
 
 ![A cow and a pig in the Ice Plains Biome](img/jees-labels/detected-03-19-2021_13-53-42_6.jpg)
 ![Chicken in the Birch Forest](img/jees-labels/detected-03-18-2021_13-30-59_24.jpg)
@@ -118,8 +116,6 @@ As we can see, the YOLOv3 model had an overall better quantitative result than t
 
 ### Challenges & Features
 
-One of the next steps in building our model was providing the ability to extend it to different mobs. Our model can now detect 4 different types of mobs. These four minecraft mobs include, chickens, villagers, cows, and pigs. We choose these four mobs because of the variation in size, shape, and color from the background. However, in extending the model to include these mobs, we came across some new challenges.
-
 ![A rose or a pig?](img/jees-labels/detected-03-19-2021_17-12-22_29.jpg)
 
 [Left: *A rose by any other name is just as sweet?*] 
@@ -165,11 +161,6 @@ From this we can see that the easiest to detect in order was, chickens, cows, pi
 Below is a subset of the validation data the YOLOv3 model trained with. The model is highly accurate, but especially for mobs that are at a middle distance away from the agent and are not directly next to any other mobs in the frame. 
 
 The most significant pitfall of my model is in detecting mobs that are slightly overlapping in the frame; for instance, if a chicken is standing in front of a cow and covering part of its legs, the model will not detect the cow. In addition, the model does not do well with scaled versions of the mobs. For example, if a cow is very close to the agent, it will appear very large in the frame. The model is not able to detect that it is a cow even though it is clearly visible.
-
-![Ground Truth](img/natalia-images/image15.png)
-![Natalia's Model Prediction](img/natalia-images/image10.png)
-
-[Left-hand-side Ground Truth, Right-hand-side Natalia’s Model Predictions]
 
 ![Chicken-Villager?](img/natalia-images/image6.jpg)
 
