@@ -3,9 +3,10 @@ layout: default
 title: Final Report
 ---
 
-<iframe width="1061" height="597" src="https://youtu.be/embed/jo9RK8UAzMQ"
+<!-- <iframe width="1061" height="597" src="https://youtu.be/embed/jo9RK8UAzMQ"
 frameborder="0" allow="accelerometer; autoplay; clipboard-write;
-encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
+<iframe width="1061" height="597" src="https://www.youtube.com/embed/jo9RK8UAzMQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ## Project Summary
 
@@ -107,12 +108,6 @@ As we can see, the YOLOv3 model had an overall better quantitative result than t
 
 [Left: *A color-map view of the jungle biome*] [Right: *Picture of the jungle biome* ]
 
-Biome Distractors
-
-The various biomes resulted in many more distractors from the mobs themselves. For instance, in the picture on the left, we see that the environment is filled with trees, with “wood” in a reddish-purple, “leaf-block” the neon-green, and “vine-block” the darker-green. All of these distractors add complexity to our model, which then reduces our confidence in any given image. 
-
-This is well shown in the bottom left image, the ImageAI model has a 98.234% confidence that the actual red rose is a pig, instead of detecting the actual pig next to the grass. Both the ImageAI and YOLOv3 models ran into this issue.
-
 
 ### Challenges & Features
 
@@ -169,7 +164,7 @@ The most significant pitfall of my model is in detecting mobs that are slightly 
 
 [Left-hand-side Ground Truth, Right-hand-side Natalia’s Model Predictions]
 
-![Chicken-Villager?](img/natalia-images/image6.png)
+![Chicken-Villager?](img/natalia-images/image6.jpg)
 
 ## Resources Used
 
