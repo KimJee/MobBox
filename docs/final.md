@@ -3,7 +3,7 @@ layout: default
 title: Final Report
 ---
 
-<iframe width="1061" height="597" src="https://youtu.be/jo9RK8UAzMQ"
+<iframe width="1061" height="597" src="https://youtu.be/embed/jo9RK8UAzMQ"
 frameborder="0" allow="accelerometer; autoplay; clipboard-write;
 encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
@@ -119,6 +119,7 @@ This is well shown in the bottom left image, the ImageAI model has a 98.234% con
 One of the next steps in building our model was providing the ability to extend it to different mobs. Our model can now detect 4 different types of mobs. These four minecraft mobs include, chickens, villagers, cows, and pigs. We choose these four mobs because of the variation in size, shape, and color from the background. However, in extending the model to include these mobs, we came across some new challenges.
 
 ![A rose or a pig?](img/jees-labels/detected-03-19-2021_17-12-22_29.jpg)
+
 [Left: *A rose by any other name is just as sweet?*] 
 
 ### Biome Distractors
